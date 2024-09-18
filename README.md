@@ -27,7 +27,7 @@
  - pagination
 
 ### HomeModel.php
- - { 
+ ```{ 
     tripsCompleted: 0,
     tripsUpgraded: 0,
     refusedBookings: 0,
@@ -47,3 +47,4 @@
       }
    ]
 }
+```
