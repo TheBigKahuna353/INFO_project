@@ -15,7 +15,8 @@
     "@mui/material": "6.1.0",
     "@mui/icons-material": "6.1.0",
     "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5"
+    "@emotion/styled": "^11.11.5",
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7"
   },
   "scripts": {
     "start": "react-scripts start",

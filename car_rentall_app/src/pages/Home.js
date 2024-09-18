@@ -11,7 +11,7 @@ const Home = () => {
         axios.get('http://localhost:80/INFO_project/Server/test.php')
         .then(function (response) {
             console.log(response.data);
-            setData(response.data);
+            setData(response.data.message);
         })
         .catch(function (error) {
             console.log(error);

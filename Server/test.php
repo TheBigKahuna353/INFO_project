@@ -1,5 +1,8 @@
 <?php
 header("Access-Control-Allow-Origin: *");
+header('Content-Type: application/json');
 
-echo "Hello World!";
+$data =  ["message" => "Hello World!"];
+
+echo json_encode($data);
 ?>
