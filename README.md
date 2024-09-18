@@ -12,3 +12,38 @@
 
 
 [https://mui.com/material-ui/getting-started/usage/]
+
+# TODO
+### Home screen
+ - simulation data
+ - costs and rates
+ - car types
+
+### Vehicles screen
+ - foreach car, show
+   - list of trips
+   - maintainence records
+   - relocations
+ - pagination
+
+### HomeModel.php
+ - { 
+    tripsCompleted: 0,
+    tripsUpgraded: 0,
+    refusedBookings: 0,
+    refusedWalkins: 0,
+    vehiclesRelocated: 0,
+    vehiclesServiced: 0,
+ 
+
+   vehicleTypes: [
+      {
+          name: "",
+          dailyHireRate: 0,
+          flatMaintenanceRate: 0,
+          hourlyRelocationRate: 0,
+          purchaseCost: 0,
+          monthlyLeaseCost: 0
+      }
+   ]
+}
