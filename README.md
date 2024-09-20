@@ -21,9 +21,8 @@
 
 ### Vehicles screen
  - foreach car, show
-   - list of trips
-   - maintainence records
-   - relocations
+   - car properties
+   - link to detailed page of vehicle
  - pagination
 
 ### HomeModel.php
@@ -48,3 +47,16 @@
    ]
 }
 ```
+
+### VehiclesModel.php
+```
+{
+   [
+      rego: "",
+      category: "",
+      odometer: "",
+      commissioned: 0,
+      decommissioned: 0
+   ],
+   count: 0
+}

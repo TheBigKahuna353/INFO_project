@@ -28,7 +28,7 @@ function getAllItems()
 
     $result = $result->fetch();
 
-    $data[] = [
+    $data = [
         'tripsCompleted' => htmlspecialchars($result['Trips Completed']),
         'tripsUpgraded' => htmlspecialchars($result['Trips Upgraded']),
         'refusedBookings' => htmlspecialchars($result['Refused Bookings']),
@@ -37,7 +37,7 @@ function getAllItems()
         'vehiclesServiced' => htmlspecialchars($result['Vehicles Serviced'])
     ];
 
-    echo json_encode($data[0]);
+    echo json_encode($data);
     
 }
 

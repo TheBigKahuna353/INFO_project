@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import { AppBar, Button } from '@mui/material';
+import { Button } from '@mui/material';
+import AppBar from '../components/AppBar';
 
 const defaultData = {
     tripsCompleted: 0,
@@ -31,9 +32,7 @@ const Home = () => {
 
     return (
         <div>
-            <AppBar position="static">
-                <h1>Car Rentals</h1>
-            </AppBar>
+            <AppBar/>
             <h1>Home</h1>
             <p>Trips Completed: {data.tripsCompleted}</p>
             <p>Trips Upgraded: {data.tripsUpgraded}</p>
