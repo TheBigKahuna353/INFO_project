@@ -36,14 +36,10 @@
  
 
    vehicleTypes: [
-      {
+       {
           name: "",
-          dailyHireRate: 0,
-          flatMaintenanceRate: 0,
-          hourlyRelocationRate: 0,
-          purchaseCost: 0,
-          monthlyLeaseCost: 0
-      }
+          price: 0
+       }
    ]
 }
 ```
