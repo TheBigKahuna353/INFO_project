@@ -58,6 +58,9 @@ function getMaintenance($rego) {
         $result = $pdo->query($query);
     } catch (PDOException $e) {
         fatalError($e->getMessage());
+        header('HTTP/1.0 500 Server Error');
+        echo 'Database Error';
+        echo $query;
         return;
     }
     return json_encode($result->fetchall());
@@ -83,6 +86,9 @@ function getVehicles()
         $result = $pdo->query($query);
     } catch (PDOException $e) {
         fatalError($e->getMessage());
+        header('HTTP/1.0 500 Server Error');
+        echo 'Database Error';
+        echo $query;
         return;
     }
     
