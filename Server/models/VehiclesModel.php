@@ -30,7 +30,7 @@ function getVehicles()
     $pdo = openConnection();
 	$query = "SELECT 
                 vehicle_rego AS rego,
-                vehicle_category AS cetegory,
+                vehicle_category AS category,
                 odometer,
                 commissioned,
                 decommissioned
@@ -48,8 +48,8 @@ function getVehicles()
     while ($row = $result->fetch()) {
         $i++;
         $data[] = [
-            'rego' => htmlspecialchars($row['vehicle_rego']),
-            'category' => htmlspecialchars($row['vehicle_category']),
+            'rego' => htmlspecialchars($row['rego']),
+            'category' => htmlspecialchars($row['category']),
             'odometer' => htmlspecialchars($row['odometer']),
             'commisioned' => htmlspecialchars($row['commissioned']),
             'decommisioned' => htmlspecialchars($row['decommissioned']),

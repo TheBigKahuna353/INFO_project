@@ -3,24 +3,31 @@ import VehicleListObj from './VehicleListObj';
 
 
 
-const VehicleList = (vehicles) => {
+const VehicleList = (props) => {
 
-    if (vehicles.count === 0) {
+    if (props.vehicles.count === 0) {
         return <div>
             <h1>Vehicles</h1>
             <p>Loading...</p>
         </div>
     }
 
-    console.log(vehicles);
-    vehicles = vehicles.vehicles;
+    let vehicles = props.vehicles;
+
+    const card = {
+        padding: "10px",
+        margin: "20px",
+        display: "inline-grid",
+        width: "fit-content",
+        minWidth: "20%",
+        position: "relative",
+    }
 
     return (
-        <div>
-            <h1>Vehicles</h1>
-            <div style={{display: "flex", flexWrap: "wrap"}}>
+        <div style={{}}>
+            <div style={{}}>
                 {vehicles.map((vehicle) => (
-                    <div key={vehicle.rego} style={{margin: "10px"}}>
+                    <div key={vehicle.rego} style={card}>
                         <VehicleListObj {...vehicle}/>
                     </div>
                 ))}

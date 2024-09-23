@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Button } from '@mui/material';
+import VehicleTypeList from '../components/VehicleTypeList';
 import AppBar from '../components/AppBar';
 
 const defaultData = {
@@ -10,6 +10,7 @@ const defaultData = {
     refusedWalkins: 0,
     vehiclesRelocated: 0,
     vehiclesServiced: 0,
+    vehicleCategories: []
 };
 
 
@@ -23,6 +24,7 @@ const Home = () => {
         .then(function (response) {
             console.log(response.data);
             setData(response.data);
+            console.log(response.data.vehicleCategories);
         })
         .catch(function (error) {
             console.log(error);
@@ -40,9 +42,7 @@ const Home = () => {
             <p>Refused Walkins: {data.refusedWalkins}</p>
             <p>Vehicles Relocated: {data.vehiclesRelocated}</p>
             <p>Vehicles Serviced: {data.vehiclesServiced}</p>
-            <Button variant="contained" color="primary">
-                Hello World
-            </Button>
+            <VehicleTypeList cats={data.vehicleCategories}/>
         </div>
     );
 };

@@ -1,19 +1,9 @@
 import React from 'react';
-import { AppBar as Bar, Button, Toolbar, Typography } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { AppBar as Bar, Button, ButtonGroup, Toolbar, Typography } from '@mui/material';
 
 
 
 const AppBar = () => {
-
-    const loc = useLocation();
-
-    const page = loc.pathname;
-
-    let getColor = (button) => {
-        if (page === button) return 'secondary';
-        return 'primary';
-    }
 
     return (
         <Bar position="static">
@@ -21,14 +11,13 @@ const AppBar = () => {
                 <Typography variant="h5" component="div" sx={{margin: "10px"}}>
                 Car Rentals
                 </Typography>
-                <Button 
-                    variant="contained" 
-                    color={getColor("/")} 
-                    sx={{margin: "10px"}}   
-                    href="/">
-                        Home
-                </Button>
-                <Button variant="contained" color={getColor("/vehicles")} href="/vehicles">Vehicles</Button>
+                <ButtonGroup variant="text" color="inherit" aria-label="text primary button group">
+                    <Button 
+                        href="/">
+                            Home
+                    </Button>
+                    <Button href="/vehicles">Vehicles</Button>
+                </ButtonGroup>
             </Toolbar>
         </Bar>
     );

@@ -56,3 +56,49 @@
    ],
    count: 0
 }
+```
+### Vehicle
+- rego
+- odo
+- commisioned
+- decommisioned
+- trips
+- maintaninences
+- relocations
+
+### VehicleModel.php
+```
+{
+   rego: "",
+   category: "",
+   odometer: "",
+   commissioned: 0,
+   decommissioned: 0,
+   trips: [
+      {
+         start_date: "",
+         end_date: "",
+         origon: "",
+         destination: "",
+         distance, ""
+      }
+   ],
+   maintenances: [
+      {
+         start_date: "",
+         end_date: "",
+         location: "",
+         mileage: ""
+      }
+   ],
+   relocations: [
+      {
+         start_date: "",
+         end_date: "",
+         origon: "",
+         destination: "",
+         distance, ""
+      }
+   ]
+}
+```
