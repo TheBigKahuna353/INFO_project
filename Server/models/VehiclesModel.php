@@ -72,7 +72,7 @@ function getVehicles()
         $count = $pdo->query($countQuery);
     } catch (PDOException $e) {
         fatalError($e->getMessage());
-        header('HTTP/1.0 500 Server Error');
+        http_response_code(500);
         echo $query;
         return;
     }
