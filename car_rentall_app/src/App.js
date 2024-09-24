@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Vehicles from './pages/Vehicles';
 import Vehicle from './pages/Vehicle';
 import NotFound from './pages/NotFound';
+import Relocations from './pages/Relocations';
 
 
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/vehicles" element={<Vehicles />} />
           <Route path="/vehicles/:rego" element={<Vehicle />} />
           <Route path="*" element={<NotFound/>} />
+          <Route path="/relocations" element={<Relocations/>} />
         </Routes>
       </Router>
     </div>

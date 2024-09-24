@@ -12,11 +12,9 @@ const AppBar = () => {
                 Car Rentals
                 </Typography>
                 <ButtonGroup variant="text" color="inherit" aria-label="text primary button group">
-                    <Button 
-                        href="/">
-                            Home
-                    </Button>
+                    <Button href="/">Home</Button>
                     <Button href="/vehicles">Vehicles</Button>
+                    <Button href="/relocations">Relocations</Button>
                 </ButtonGroup>
             </Toolbar>
         </Bar>
