@@ -20,7 +20,9 @@
     "chart.js": "^4.4.4",
     "react-chartjs-2": "^5.2.0",
     "leaflet": "^1.7.1",
-    "react-leaflet": "^4.0.0"
+    "react-leaflet": "^4.0.0",
+    "moment": "^2.29.1",
+    "chartjs-adapter-moment": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
