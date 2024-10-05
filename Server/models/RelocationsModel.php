@@ -5,6 +5,28 @@ header("Access-Control-Allow-Origin: *");
 header('Content-Type: application/json');
 
 
+function getSingle() {
+    $pdo = openConnection();
+    $id = $_GET['id'];
+    $query = "SELECT 
+                start_date,
+                end_date,
+                origin,
+                destination,
+                distance,
+                vehicle_rego AS rego,
+                relocation_id AS id
+            FROM relocation_whole
+            WHERE relocation_id = $id";
+    try {
+        $result = $pdo->query($query);
+    } catch (PDOException $e) {
+        fatalError($e->getMessage());
+        return;
+    }
+    return json_encode($result->fetch());
+}
+
 function getallRelocations() {
 
     // startIndex = 0
@@ -18,7 +40,8 @@ function getallRelocations() {
                 origin,
                 destination,
                 distance,
-                vehicle_rego AS rego
+                vehicle_rego AS rego,
+                relocation_id AS id
             FROM relocation_whole";
     
     if (isset($_GET['num'])) {
@@ -43,7 +66,10 @@ function getallRelocations() {
     return json_encode($result->fetchall());
 }
 
-echo getallRelocations();
-
+if (isset($_GET['id'])) {
+    echo getSingle();
+} else {
+    echo getallRelocations();
+}
 
 ?>

@@ -15,6 +15,7 @@ const AppBar = () => {
                     <Button href="/">Home</Button>
                     <Button href="/vehicles">Vehicles</Button>
                     <Button href="/relocations">Relocations</Button>
+                    <Button href="/trips">Trips</Button>
                 </ButtonGroup>
             </Toolbar>
         </Bar>
