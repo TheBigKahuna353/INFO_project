@@ -97,6 +97,20 @@ function getCityNames() {
     return json_encode($data);
 }
 
-echo '{"quarterly": ' . getQuarterly() . ', "cityTraffic": ' . getCityTraffic() . ', "cityNames": ' . getCityNames() . '}';
+function lifeTimeDuration() {
+    $pdo = openConnection();
+    $query = "SELECT * FROM lifetime";
+    try {
+        $result = $pdo->query($query);
+    } catch (PDOException $e) {
+        fatalError($e->getMessage());
+        return;
+    }
 
+    return json_encode($result->fetchAll());
+
+}
+
+echo '{"quarterly": ' . getQuarterly() . ', "cityTraffic": ' . getCityTraffic() . ', "cityNames": ' . getCityNames();
+echo ', "lifeTimeDuration": ' . lifeTimeDuration() . '}';
 ?>

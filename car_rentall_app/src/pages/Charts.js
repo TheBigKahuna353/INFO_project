@@ -1,6 +1,6 @@
 import React from "react";
 import AppBar from "../components/AppBar";
-import { Line } from 'react-chartjs-2';
+import { Bar, Line } from 'react-chartjs-2';
 import axios from "axios";
 import { registerables , Chart } from "chart.js";
 import 'chartjs-adapter-moment';
@@ -13,6 +13,7 @@ const Charts = () => {
     const [quarterlyData, setQuarterlyData] = React.useState(null);
     const [dailyLocations, setDailyLocations] = React.useState(null);
     const [cityNames, setCityNames] = React.useState(null);
+    const [lifetimeData, setLifetimeData] = React.useState(null);
 
     React.useEffect(() => {
         axios.get('http://localhost:80/INFO_project/Server/models/ChartsModel.php')
@@ -21,6 +22,7 @@ const Charts = () => {
             setQuarterlyData(response.data.quarterly);
             setDailyLocations(response.data.cityTraffic);
             setCityNames(response.data.cityNames);
+            setLifetimeData(response.data.lifeTimeDuration);
         })
         .catch(function (error) {
             console.log(error);
@@ -44,8 +46,6 @@ const Charts = () => {
       const data2 = dailyLocations !== null ? {
         labels: dailyLocations.map((item) => item.date),
         datasets: cityNames.map((city) => {
-            console.log(city);
-            console.log(dailyLocations.filter((item) => item.place === city.place).map((item) => item.num));
             return {
                 label: city.place,
                 data: dailyLocations.filter((item) => item.place === city.place).map((item) => item.num),
@@ -53,6 +53,22 @@ const Charts = () => {
             }
         })
       } : {};
+
+      // histogram data
+      // data is an array of objects with rego and lifetime (in days)
+      // we want to create a histogram of how many cars have been rented for how many days
+      const data3 = lifetimeData !== null ? {
+        labels: [...new Set(lifetimeData.map((item) => item.range))],
+        datasets: [{
+            label: 'Lifetime',
+            data: lifetimeData.map((item) => item.num),
+            spanGaps: true,
+            barPercentage: 1.0,
+            categoryPercentage: 1.0,
+        }]
+        } : {};
+
+
 
       const options = {
         scales: {
@@ -81,6 +97,13 @@ const Charts = () => {
                     <Line data={data2} options={options}/>
                 </div>
             : 
+                <p>loading</p>}
+            <h2>Lifetime Data</h2>
+            {lifetimeData ? 
+                <div style={{width: "40%", margin: "auto"}}>
+                    <Bar data={data3}/>
+                </div>
+            :
                 <p>loading</p>}
         </div>
     );
