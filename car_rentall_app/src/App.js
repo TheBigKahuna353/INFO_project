@@ -9,7 +9,8 @@ import Trips from './pages/Trips';
 import Trip from './pages/Trip';
 import Relocation from './pages/Relocation';
 import Charts from './pages/Charts';
-
+import SignIn from './pages/Login';
+import SignUp from './pages/Register';
 
 // for each page, create a route, so it runs the code for the page
 function App() {
@@ -26,6 +27,8 @@ function App() {
           <Route path="/trips/:trip_id" element={<Trip/>} />
           <Route path="/relocations/:id" element={<Relocation/>} />
           <Route path="/charts" element={<Charts/>} />
+          <Route path="/login" element={<SignIn/>} />
+          <Route path="/register" element={<SignUp/>} />
         </Routes>
       </Router>
     </div>
