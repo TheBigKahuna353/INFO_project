@@ -18,11 +18,17 @@ const VehicleTypeList = (props) => {
     return (
         <div>
             <h1>Categories</h1>
-            <div style={{display: "flex", flexWrap: "wrap"}}>
+            <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-around"}}>
                 {cats.map((cat) => (
                     <div key={cat.category} style={{margin: "10px"}}>
                         <Card>
-                            <CardMedia component="img" height="250" image={getURL(cat.category)} alt="Vehicle Image" />
+                            <CardMedia 
+                                component="img" 
+                                height="250"
+                                width="250"
+                                sx={{objectFit:"cover"}}
+                                image={getURL(cat.category)} 
+                                alt="Vehicle Image" />
                             <h1>{cat.category}</h1>
                             <p>From ${cat.price}</p>
                         </Card>

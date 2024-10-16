@@ -9,8 +9,9 @@ function getVehicleTypes() {
     // Execute select query onto the database
     $pdo = openConnection();
     $query = "SELECT 
-                DISTINCT vehicle_category as category
-            FROM vehicle";
+                vehicle_category as category,
+                daily_hire_rate as price
+            FROM costs_and_rates";
     try {
         $result = $pdo->query($query);
     } catch (PDOException $e) {
@@ -22,7 +23,7 @@ function getVehicleTypes() {
     while ($row = $result->fetch()) {
         $data[] = [
             'category' => htmlspecialchars($row['category']),
-            'price' => 0
+            'price' => htmlspecialchars($row['price']),
         ];
     }
     return $data;

@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import AppBar from '../components/AppBar';
 import VehicleList from '../components/VehicleList';
-import { Pagination } from '@mui/material';
+import { Pagination, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput, Slider } from '@mui/material';
 
 const defaultData = {
     vehicles: [],
@@ -11,39 +11,135 @@ const defaultData = {
 
 const pageSize = 50; // need to change to dynamic
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 const Vehicles = () => {
 
     const [vehicles, setVehicles] = React.useState(defaultData);
     const [page, setPage] = React.useState(1);
+    const [cats, setCats] = React.useState([]);
 
+    const [catsSelected, setCatsSelected] = React.useState([]);
+    const [odoRange, setOdoRange] = React.useState([0, 70000]);
+    const [rego, setRego] = React.useState('');
+
+    // get vehicles
     React.useEffect(() => {
+        console.log(catsSelected);
         axios.get('http://localhost:80/INFO_project/Server/models/VehiclesModel.php', {
             params: {
                 startIndex: (page - 1) * pageSize,
-                num: pageSize
+                num: pageSize,
+                cats: catsSelected,
+                minOdo: odoRange[0],
+                maxOdo: odoRange[1],
+                rego: rego
             }
         })
         .then(function (response) {
-            console.log("recieved");
-            console.log("fetched:" + response.data);
             setVehicles(response.data);
         })
         .catch(function (error) {
             console.log(error);
         });
-    }, [page]);
+    }, [page, catsSelected, odoRange, rego]);
 
+    // get categories
+    React.useEffect(() => {
+        axios.get('http://localhost:80/INFO_project/Server/models/CategoriesModel.php')
+        .then(function (response) {
+            setCats(response.data);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }, []);
+
+    const handleChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setCatsSelected(
+            // On autofill we get the stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    }
+
+    const handleOdoChange = (event, newValue) => {
+        if (newValue[1] - newValue[0] < 1000) {
+            if (newValue[0] === odoRange[0]) {
+                setOdoRange([newValue[0], newValue[0] + 1000]);
+            } else {
+                setOdoRange([newValue[1] - 1000, newValue[1]]);
+            }
+        } else {
+            setOdoRange(newValue);
+        }
+    }
 
     return (
         <div>
             <AppBar/>
             <h1>Vehicles</h1>
             <p>{vehicles.count} vehicles found</p>
+            <div>
+                <FormControl sx={{ m: 1, width: 150}}>
+                    <InputLabel htmlFor="outlined-adornment-amount">Rego</InputLabel>
+                    <OutlinedInput
+                        id="outlined-adornment-amount"
+                        value={rego}
+                        onChange={(event) => setRego(event.target.value.toUpperCase())}
+                        label="Rego"
+                    />
+                </FormControl>
+            </div>
+            <FormControl sx={{ m: 1, width: 300}}>
+                <InputLabel id="demo-multiple-checkbox-label">Categories</InputLabel>
+                <Select
+                labelId="demo-multiple-checkbox-label"
+                id="demo-multiple-checkbox"
+                multiple
+                value={catsSelected}
+                onChange={handleChange}
+                input={<OutlinedInput label="Tag" />}
+                renderValue={(selected) => selected.join(', ')}
+                MenuProps={MenuProps}
+                >
+                {cats.map((name) => (
+                    <MenuItem key={name} value={name}>
+                    <Checkbox checked={catsSelected.includes(name)} />
+                    <ListItemText primary={name} />
+                    </MenuItem>
+                ))}
+                </Select>
+            </FormControl>
+            <InputLabel id="range-slider" sx={{}}>Odometer range</InputLabel>
+            <Slider
+                getAriaLabel={() => 'Minimum distance'}
+                value={odoRange}
+                onChange={handleOdoChange}
+                valueLabelDisplay="auto"
+                aria-labelledby="range-slider"
+                disableSwap
+                sx={{width: 300}}
+                max={70000}
+                step={1000}
+            />
             <Pagination 
                 count={Math.ceil(vehicles.count/pageSize)} 
                 color="primary" 
                 page={page}
                 onChange={(event, value) => setPage(value)}
+                style={{margin: "auto", justifyContent: "center", display: "flex"}}
                 />
             <VehicleList vehicles={vehicles.vehicles}/>
         </div>

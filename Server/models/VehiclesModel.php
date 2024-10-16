@@ -23,12 +23,12 @@ function getVehicles()
                 odometer,
                 commissioned,
                 decommissioned
-            FROM vehicle";
-    $countQuery = "SELECT COUNT(vehicle_rego) as count FROM vehicle";
+            FROM vehicle WHERE";
+    $countQuery = "SELECT COUNT(vehicle_rego) as count FROM vehicle WHERE";
     if (isset($_GET['cats'])) {
         $cats = $_GET['cats'];
-        $query .= " WHERE vehicle_category IN (";
-        $countQuery .= " WHERE vehicle_category IN (";
+        $query .= " vehicle_category IN (";
+        $countQuery .= " vehicle_category IN (";
         $i = 0;
         foreach ($cats as $cat) {
             $query .= "'$cat'";
@@ -39,23 +39,31 @@ function getVehicles()
             }
             $i++;
         }
-        $query .= ')';
-        $countQuery .= ')';
+        $query .= ') AND';
+        $countQuery .= ') AND';
     }
     if (isset($_GET['minOdo'])) {
         $minOdo = $_GET['minOdo'];
-        $query .= " WHERE odometer >= $minOdo";
-        $countQuery .= " WHERE odometer >= $minOdo";
+        $query .= " odometer >= $minOdo AND";
+        $countQuery .= " odometer >= $minOdo AND";
     }
     if (isset($_GET['maxOdo'])) {
         $maxOdo = $_GET['maxOdo'];
-        $query .= " WHERE odometer <= $maxOdo";
-        $countQuery .= " WHERE odometer <= $maxOdo";
+        $query .= " odometer <= $maxOdo AND";
+        $countQuery .= " odometer <= $maxOdo AND";
     }
     if (isset($_GET['rego'])) {
         $rego = $_GET['rego'];
-        $query .= " WHERE vehicle_rego LIKE '$rego%'";
-        $countQuery .= " WHERE vehicle_rego LIKE '$rego%'";
+        $query .= " vehicle_rego LIKE '$rego%'";
+        $countQuery .= " vehicle_rego LIKE '$rego%'";
+    }
+    if ($query[strlen($query) - 1] == 'D' && $query[strlen($query) - 2] == 'N' && $query[strlen($query) - 3] == 'A') {
+        $query = substr($query, 0, strlen($query) - 4);
+        $countQuery = substr($countQuery, 0, strlen($countQuery) - 4);
+    }
+    if ($query[strlen($query) - 1] == 'E' && $query[strlen($query) - 2] == 'R' && $query[strlen($query) - 3] == 'E') {
+        $query = substr($query, 0, strlen($query) - 6);
+        $countQuery = substr($countQuery, 0, strlen($countQuery) - 6);
     }
     if (isset($_GET['num'])) {
         $num = $_GET['num'];
