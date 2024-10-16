@@ -14,91 +14,17 @@
 [https://mui.com/material-ui/getting-started/usage/]
 
 # TODO
-### Home screen
- - simulation data
- - costs and rates
- - car types
 
-### Vehicles screen
- - foreach car, show
-   - car properties
-   - link to detailed page of vehicle
- - pagination
-
-### HomeModel.php
- ```{ 
-    tripsCompleted: 0,
-    tripsUpgraded: 0,
-    refusedBookings: 0,
-    refusedWalkins: 0,
-    vehiclesRelocated: 0,
-    vehiclesServiced: 0,
- 
-
-   vehicleTypes: [
-       {
-          name: "",
-          price: 0
-       }
-   ]
-}
-```
-
-### VehiclesModel.php
-```
-{
-   [
-      rego: "",
-      category: "",
-      odometer: "",
-      commissioned: 0,
-      decommissioned: 0
-   ],
-   count: 0
-}
-```
-### Vehicle
-- rego
-- odo
-- commisioned
-- decommisioned
-- trips
-- maintaninences
-- relocations
-
-### VehicleModel.php
-```
-{
-   rego: "",
-   category: "",
-   odometer: "",
-   commissioned: 0,
-   decommissioned: 0,
-   trips: [
-      {
-         start_date: "",
-         end_date: "",
-         origon: "",
-         destination: "",
-         distance, ""
-      }
-   ],
-   maintenances: [
-      {
-         start_date: "",
-         end_date: "",
-         location: "",
-         mileage: ""
-      }
-   ],
-   relocations: [
-      {
-         start_date: "",
-         end_date: "",
-         origon: "",
-         destination: "",
-         distance, ""
-      }
-   ]
-}
-```
+- make types on homescreen clickable to send to vehicles screen
+- add search/filters for all pages
+- add filters for relocations backend (need to copy and paste from othe files)
+- move login/register to other side of appbar
+- when click on lifetime graph, show vehicles in clicked bin
+- add profile menu when logged in
+- allow users to write to cost and rate tables
+- Display a list vehicles in need of maintenance (perhaps in maintainence page?)
+- make list objects look nicer
+  - add pictures?
+- make pagination work for all pages
+- be able to change the per page
+- make tables for each page???

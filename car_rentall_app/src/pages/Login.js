@@ -65,6 +65,7 @@ export default function SignIn(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [mode, setMode] = React.useState('light');
+  const [email, setEmail] = React.useState('');
   const defaultTheme = createTheme({ palette: { mode } });
 const navigate = useNavigate();
 
@@ -83,8 +84,16 @@ const navigate = useNavigate();
     }
   }, []);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    if (!data.get('email') || !/\S+@\S+\.\S+/.test(data.get('email'))) {
+        setEmailError(true);
+        setEmailErrorMessage('Please enter a valid email address.');
+        return;
+        }
     setOpen(true);
+    setEmail(data.get('email'));
   };
 
   const handleClose = () => {
@@ -195,7 +204,7 @@ const navigate = useNavigate();
                 <FormLabel htmlFor="password">Password</FormLabel>
                 <Link
                   component="button"
-                  type="button"
+                  type="submit"
                   onClick={handleClickOpen}
                   variant="body2"
                   sx={{ alignSelf: 'baseline' }}
@@ -245,7 +254,7 @@ const navigate = useNavigate();
           </Box>
         </Card>
       </SignInContainer>
-        <ForgotPassword open={open} handleClose={handleClose} />
+        <ForgotPassword open={open} handleClose={handleClose} email={email}/>
         </ThemeProvider>
       </div>
   );

@@ -18,6 +18,10 @@ const AppBar = () => {
                     <Button href="/trips">Trips</Button>
                     <Button href="/charts">Charts</Button>
                 </ButtonGroup>
+                <ButtonGroup variant="text" color="inherit" aria-label="text primary button group" sx={{marginRight:"20px"}}>
+                    <Button href="/login">Login</Button>
+                    <Button href="/register">Register</Button>
+                </ButtonGroup>
             </Toolbar>
         </Bar>
     );
