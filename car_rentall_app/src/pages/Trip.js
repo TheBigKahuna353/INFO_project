@@ -38,8 +38,10 @@ const Trip = () => {
         });
     }, [trip_id]);
 
+    const locations = trip.origin !== "" ? [trip.origin, trip.destination] : [];
 
     return (
+
         <div>
             <AppBar/>
             <h1>Trip</h1>
@@ -51,7 +53,7 @@ const Trip = () => {
             <p>Start Date: {trip.start_date}</p>
             <p>End Date: {trip.end_date}</p>
 
-            <Map origin={trip.origin} destination={trip.destination}/>
+            <Map locations={locations} drawLine={true}/>
 
         </div>
     );

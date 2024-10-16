@@ -23,30 +23,23 @@ let DefaultIcon = L.icon({
 
 const Map = (props) => {
 
+    const locations = props.locations;
+    console.log(locations);
 
-    const cityData = Cities.filter(city => city.city.toUpperCase() === props.origin)[0];
-
-    if (!props.origin || !cityData) {
-        console.log("Origin not provided");
-        console.log(props.origin);
-        console.log(cityData);
-        return (
-            <div>
-                <h1>Map</h1>
-                <p>Origin not provided</p>
-            </div>
-        );
+    if (locations.length === 0) {
+        return <p>Loading...</p>
     }
-    var destination = null;
-    if (props.destination) {
-        destination = Cities.filter(city => city.city.toUpperCase() === props.destination)[0];
-        destination = [destination.lat, destination.lng];
-    }
+    console.log(locations);
+    const data = []
+    locations.forEach((location) => {
+        const temp = Cities.filter(city => city.city.toUpperCase() === location)[0];
+        data.push([temp.lat, temp.lng]);
+    })
 
-    const origin = [cityData.lat, cityData.lng];
+    const drawLine = props.drawLine ? true : false;
 
-    console.log(origin);
-    console.log(destination);
+    console.log(data);
+
 
     return (
         <MapContainer center={center} zoom={5} scrollWheelZoom={false}>
@@ -54,17 +47,20 @@ const Map = (props) => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={origin}>
+            <Marker position={data[0]}>
                 <Popup>
-                    {props.origin}
+                    {locations[0]}
                 </Popup>
             </Marker>
-            {props.destination && <Marker position={destination}>
-                <Popup>
-                    {props.destination}
-                </Popup>
-                && <Polyline positions={[origin, destination]} />
-                </Marker>}
+            {data.slice(1).map((loc, index) => {
+                return (
+                <Marker key={loc} position={loc}>
+                    <Popup>
+                        {locations[index + 1]}
+                    </Popup>
+                    {drawLine && <Polyline positions={[data[0], loc]} />}
+                </Marker>
+            )}) }
         </MapContainer>
     );
 }

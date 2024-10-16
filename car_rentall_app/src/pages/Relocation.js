@@ -36,6 +36,8 @@ const Relocation = () => {
         });
     }, [id]);
 
+    const locations = relocation.origin !== "" ? [relocation.origin, relocation.destination] : [];
+
     return (
         <div>
             <AppBar/>
@@ -46,7 +48,7 @@ const Relocation = () => {
             <p>Destination: {relocation.destination}</p>
             <p>Distance: {relocation.distance}km</p>
 
-            <Map origin={relocation.origin} destination={relocation.destination}/>
+            <Map locations={locations} drawLine={true}/>
         </div>
     );
 }

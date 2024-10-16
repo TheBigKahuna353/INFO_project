@@ -66,6 +66,7 @@ const AppBar = () => {
                     <Button href="/relocations">Relocations</Button>
                     <Button href="/trips">Trips</Button>
                     <Button href="/charts">Charts</Button>
+                    <Button href="/locations">Locations</Button>
                 </ButtonGroup>
                 <div style={{flexGrow: 1}}></div>
                 {loggedIn ?
