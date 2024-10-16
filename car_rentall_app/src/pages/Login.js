@@ -122,6 +122,7 @@ const navigate = useNavigate();
             return;
         }
         sessionStorage.setItem('auth_token', response.data.token);
+        sessionStorage.setItem('LoggedIn', true);
         navigate('/');
     }).catch(function (error) {
         console.log(error);

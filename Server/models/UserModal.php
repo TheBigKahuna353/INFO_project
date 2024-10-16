@@ -94,6 +94,22 @@ function logout($auth_token) {
     }
     return json_encode(['message' => 'User logged out successfully']);
 }
+
+function get_image($auth_token) {
+    $pdo = openConnection();
+    $query = "SELECT image_url FROM user WHERE token = :auth";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':auth', $auth_token);
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        fatalError($e->getMessage());
+        return;
+    }
+    $result = $stmt->fetch();
+    return json_encode(['imageUrl' => $result['image_url']]);
+}
+
 $data = json_decode(file_get_contents('php://input'), true);
 if (!isset($data['method'])) {
     echo json_encode(['error' => 'No action specified']);
@@ -107,6 +123,8 @@ if ($data['method'] === 'login') {
     echo logout($data['auth_token']);
 } else if ($data['method'] === 'set_password') {
     echo set_password($data['email'], $data['password']);
+} else if ($data['method'] === 'image') {
+    echo get_image($data['auth_token']);
 } else {
     echo json_encode(['error' => 'Invalid action']);
 }
