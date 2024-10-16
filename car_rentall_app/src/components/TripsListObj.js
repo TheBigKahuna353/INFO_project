@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Paper, CardActionArea } from "@mui/material";
 
 
 // trip =  {
@@ -19,7 +19,7 @@ const TripsListObj = (props) => {
 
     return (
         <div>
-            <a href={`/trips/${trip.trip_id}`} style={{textDecoration: "none"}}>
+            <CardActionArea href={`/trips/${trip.trip_id}`}>
                 <Paper elevation={10}> {/* the higher the elevation, the more shadow*/}
                     <h1>Rego: {trip.rego}</h1>
                     <p>Category: {trip.category}</p>
@@ -29,7 +29,7 @@ const TripsListObj = (props) => {
                     <p>Start Date: {trip.start_date}</p>
                     <p>End Date: {trip.end_date}</p>
                 </Paper>
-            </a>
+            </CardActionArea>
         </div>
     )
 }

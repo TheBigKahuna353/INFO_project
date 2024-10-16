@@ -22,7 +22,7 @@ function getVehicleTypes() {
     $data = [];
     while ($row = $result->fetch()) {
         $data[] = [
-            'category' => htmlspecialchars($row['category']),
+            'category' => $row['category'],
             'price' => htmlspecialchars($row['price']),
         ];
     }

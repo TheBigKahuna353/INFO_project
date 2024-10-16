@@ -25,7 +25,7 @@ const AppBar = () => {
         }).catch(function (error) {
             console.log(error);
         });
-    }, []);
+    }, [loggedIn]);
 
     const settings = ['Settings', 'Logout'];
 

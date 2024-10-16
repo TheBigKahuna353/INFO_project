@@ -5,6 +5,7 @@ header("Access-Control-Allow-Origin: *");
 header('Content-Type: application/json');
 
 
+
 function getVehicleTypes() {
     // Execute select query onto the database
     $pdo = openConnection();

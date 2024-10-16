@@ -141,7 +141,6 @@ $data = json_decode(file_get_contents("php://input"), true);
 if (!isset($data['method'])) {
     if (!isset($data['params'])) {
         echo json_encode(['error' => 'No action specified']);
-        header('HTTP/1.1 400 Bad Request');
         return;
     }
     $data = $data['params'];

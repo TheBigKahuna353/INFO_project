@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper } from '@mui/material';
+import { Paper, CardActionArea } from '@mui/material';
 
 const RelocationListObj = (relocation) => {
 
@@ -7,7 +7,7 @@ const RelocationListObj = (relocation) => {
 
     return (
         <div>
-            <a href={`/relocations/${relocation.id}`} style={{textDecoration: "none"}}>
+            <CardActionArea href={`/relocations/${relocation.id}`}>
                 <Paper elevation={3}>
                     <h2>{relocation.rego}</h2>
                     <p>From: {relocation.origin}</p>
@@ -16,7 +16,7 @@ const RelocationListObj = (relocation) => {
                     <p>Start Date: {relocation.start_date}</p>
                     <p>End Date: {relocation.end_date}</p>
                 </Paper>
-            </a>
+            </CardActionArea>
         </div>
     );
 }
