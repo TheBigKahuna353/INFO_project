@@ -8,41 +8,64 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 function create_auth_token($user_id) {
     $token = bin2hex(random_bytes(64));
     $pdo = openConnection();
-    $query = "UPDATE user SET token = :token WHERE user_id = :user_id";
+    $query = "UPDATE user SET auth_token = :token WHERE user_id = :user_id";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->bindParam(':token', $token);
     try {
         $stmt->execute();
     } catch (PDOException $e) {
+        echo $query;
         fatalError($e->getMessage());
         return;
     }
+    $stmt->closeCursor();
     return $token;
 }
 
 function login($email, $password) {
-    $password = password_hash($password, PASSWORD_DEFAULT);
     $pdo = openConnection();
-    $query = "SELECT user_id FROM user WHERE email = :email AND password = :password";
+    $query = "SELECT user_id, password FROM user WHERE email = :email";
     $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':username', $username);
-    $stmt->bindParam(':password', $password);
+    $stmt->bindParam(':email', $email);
     try {
         $stmt->execute();
     } catch (PDOException $e) {
+        header('HTTP/1.1 500 Server Error');
+        echo $query;
         fatalError($e->getMessage());
         return;
     }
     $result = $stmt->fetch();
-    if ($result) {
+    $stmt->closeCursor();
+    if (password_verify($password, $result['password'])) {
         return json_encode(['token' => create_auth_token($result['user_id'])]);
     } else {
         return json_encode(['error' => 'Invalid username or password']);
     }
 }
 
+function email_exists($email) {
+    $pdo = openConnection();
+    $query = "SELECT COUNT(*) as count FROM user WHERE email = :email";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':email', $email);
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        header('HTTP/1.1 500 Server Error');
+        fatalError($e->getMessage());
+        return;
+    }
+    $result = $stmt->fetch();
+    return $result['count'] > 0;
+}
+
 function register($first_name, $last_name, $email, $password) {
+    if (email_exists($email)) {
+        header('HTTP/1.1 400 Bad Request');
+        return json_encode(['error' => 'Email already exists']);
+    }
     $password = password_hash($password, PASSWORD_DEFAULT);
     $pdo = openConnection();
     $query = "INSERT INTO user (first_name, last_name, email, password) VALUES (:first_name, :last_name, :email, :password)";
@@ -75,6 +98,7 @@ function set_password($email, $password) {
     try {
         $stmt->execute();
     } catch (PDOException $e) {
+        header('HTTP/1.1 500 Server Error');
         fatalError($e->getMessage());
         return;
     }
@@ -83,12 +107,13 @@ function set_password($email, $password) {
 
 function logout($auth_token) {
     $pdo = openConnection();
-    $query = "UPDATE user SET token = NULL WHERE token = :auth";
+    $query = "UPDATE user SET auth_token = NULL WHERE auth_token = :auth";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':auth', $auth_token);
     try {
         $stmt->execute();
     } catch (PDOException $e) {
+        header('HTTP/1.1 500 Server Error');
         fatalError($e->getMessage());
         return;
     }
@@ -97,7 +122,7 @@ function logout($auth_token) {
 
 function get_image($auth_token) {
     $pdo = openConnection();
-    $query = "SELECT image_url FROM user WHERE token = :auth";
+    $query = "SELECT image_url FROM user WHERE auth_token = :auth";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':auth', $auth_token);
     try {
@@ -110,10 +135,16 @@ function get_image($auth_token) {
     return json_encode(['imageUrl' => $result['image_url']]);
 }
 
-$data = json_decode(file_get_contents('php://input'), true);
+$data = json_decode(file_get_contents("php://input"), true);
+
+
 if (!isset($data['method'])) {
-    echo json_encode(['error' => 'No action specified']);
-    return;
+    if (!isset($data['params'])) {
+        echo json_encode(['error' => 'No action specified']);
+        header('HTTP/1.1 400 Bad Request');
+        return;
+    }
+    $data = $data['params'];
 }
 if ($data['method'] === 'login') {
     echo login($data['email'], $data['password']);
@@ -127,6 +158,7 @@ if ($data['method'] === 'login') {
     echo get_image($data['auth_token']);
 } else {
     echo json_encode(['error' => 'Invalid action']);
+    header('HTTP/1.1 400 Bad Request');
 }
 
 ?>

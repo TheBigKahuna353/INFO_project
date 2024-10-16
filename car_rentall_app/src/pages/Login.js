@@ -86,14 +86,14 @@ const navigate = useNavigate();
 
   const handleClickOpen = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    if (!data.get('email') || !/\S+@\S+\.\S+/.test(data.get('email'))) {
+    const email = document.getElementById('email');
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
         setEmailError(true);
         setEmailErrorMessage('Please enter a valid email address.');
         return;
         }
     setOpen(true);
-    setEmail(data.get('email'));
+    setEmail(email);
   };
 
   const handleClose = () => {

@@ -5,20 +5,23 @@ import axios from 'axios';
 
 const AppBar = () => {
 
-    var loggedIn = sessionStorage.getItem('LoggedIn') === "true";
-    console.log(loggedIn);
-    console.log(sessionStorage.getItem('auth_token'));
+    const [loggedIn, setLoggedIn] = React.useState(sessionStorage.getItem('LoggedIn') === 'true');
 
     const defaultUserImageURL = 'https://png.pngitem.com/pimgs/s/150-1503945_transparent-user-png-default-user-image-png-png.png'
 
     const [imageURL, setImageURL] = React.useState(defaultUserImageURL);
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/UserModal.php', {
+        if (!loggedIn) {
+            return;
+        }
+        axios.post('http://localhost:80/INFO_project/Server/models/UserModal.php', {
             params: {
-                method: 'image'
+                method: 'image',
+                auth_token: sessionStorage.getItem('auth_token')
             }
         }).then(function (response) {
-            setImageURL(response.data.image);
+            console.log(response.data);
+            setImageURL(response.data.imageUrl);
         }).catch(function (error) {
             console.log(error);
         });
@@ -35,14 +38,13 @@ const AppBar = () => {
     const handleCloseUserMenu = (event) => {
         setAnchorElUser(null);
         if (event.target.textContent === 'Logout') {
-            axios.get('http://localhost:80/INFO_project/Server/models/UserModal.php', {
-                params: {
-                    method: 'logout'
-                }
+            axios.post('http://localhost:80/INFO_project/Server/models/UserModal.php', {
+                method: 'logout',
+                auth_token: sessionStorage.getItem('auth_token')
             }).then(function (response) {
                 sessionStorage.removeItem('auth_token');
                 sessionStorage.removeItem('LoggedIn');
-                loggedIn = false;
+                setLoggedIn(false);
             }).catch(function (error) {
                 console.log(error);
             });
