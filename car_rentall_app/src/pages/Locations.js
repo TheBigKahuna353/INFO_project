@@ -7,7 +7,6 @@ import AppBar from "../components/AppBar";
 const Locations = () => {
 
     const [locations, setLocations] = React.useState([]);
-    const [selectedLocation, setSelectedLocation] = React.useState(null);
 
     React.useEffect(() => {
         axios.get('http://localhost:80/INFO_project/Server/models/LocationsModel.php')

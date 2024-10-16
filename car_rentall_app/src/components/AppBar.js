@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar as Bar, Button, ButtonGroup, Toolbar, Typography, Box, Tooltip, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
+import { AppBar as Bar, Button, ButtonGroup, Toolbar, Typography, Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Link } from '@mui/material';
 import axios from 'axios';
 
 
@@ -57,11 +57,12 @@ const AppBar = () => {
     return (
         <Bar position="static">
             <Toolbar>
-                <Typography variant="h5" component="div" sx={{margin: "10px"}}>
-                Car Rentals
-                </Typography>
+                <Link href="/" underline='none' color='inherit'>
+                    <Typography variant="h5" component="div" sx={{margin: "10px"}}>
+                        Car Rentals
+                    </Typography>
+                </Link>
                 <ButtonGroup variant="text" color="inherit" aria-label="text primary button group">
-                    <Button href="/">Home</Button>
                     <Button href="/vehicles">Vehicles</Button>
                     <Button href="/relocations">Relocations</Button>
                     <Button href="/trips">Trips</Button>

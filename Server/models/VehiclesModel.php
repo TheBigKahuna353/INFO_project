@@ -52,6 +52,16 @@ function getVehicles()
         $query .= " odometer <= $maxOdo AND";
         $countQuery .= " odometer <= $maxOdo AND";
     }
+    if (isset($_GET['MinLifetime'])) {
+        $lifetime = $_GET['MinLifetime'];
+        $query .= " (decommissioned - commissioned) >= $lifetime AND";
+        $countQuery .= " (decommissioned - commissioned) >= $lifetime AND";
+    }
+    if (isset($_GET['MaxLifetime'])) {
+        $lifetime = $_GET['MaxLifetime'];
+        $query .= " (decommissioned - commissioned) <= $lifetime AND";
+        $countQuery .= " (decommissioned - commissioned) <= $lifetime AND";
+    }
     if (isset($_GET['rego'])) {
         $rego = $_GET['rego'];
         $query .= " vehicle_rego LIKE '$rego%'";

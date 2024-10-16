@@ -35,7 +35,6 @@ const Vehicles = () => {
 
     const cat = useAllStore((state) => state.category);
     const setCat = useAllStore((state) => state.setCategory);
-    console.log(cat);
     if (cat) {
         setCat(null);
         setCatsSelected([cat]);
@@ -139,9 +138,11 @@ const Vehicles = () => {
                 valueLabelDisplay="auto"
                 aria-labelledby="range-slider"
                 disableSwap
+                getAriaValueText={(value) => `${value}km`}
                 sx={{width: 300}}
                 max={70000}
                 step={1000}
+                marks={[{value: 0, label: '0km'}, {value: 70000, label: '70000km'}]}
             />
             <Pagination 
                 count={Math.ceil(vehicles.count/pageSize)} 
