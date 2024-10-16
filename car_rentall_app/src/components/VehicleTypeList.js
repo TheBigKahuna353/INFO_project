@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from "@mui/material"
+import { Card, CardMedia } from "@mui/material"
 
 
 
@@ -13,6 +13,7 @@ const VehicleTypeList = (props) => {
     }
     let cats = props.cats;
     
+    const getURL = (category) => "http://localhost/INFO_project/Server/models/ImageModel.php?type=" + category;
 
     return (
         <div>
@@ -21,6 +22,7 @@ const VehicleTypeList = (props) => {
                 {cats.map((cat) => (
                     <div key={cat.category} style={{margin: "10px"}}>
                         <Card>
+                            <CardMedia component="img" height="250" image={getURL(cat.category)} alt="Vehicle Image" />
                             <h1>{cat.category}</h1>
                             <p>From ${cat.price}</p>
                         </Card>
