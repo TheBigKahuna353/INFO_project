@@ -3,6 +3,7 @@ import axios from 'axios';
 import AppBar from '../components/AppBar';
 import VehicleList from '../components/VehicleList';
 import { Pagination, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput, Slider } from '@mui/material';
+import useAllStore from '../utils/store';
 
 const defaultData = {
     vehicles: [],
@@ -31,6 +32,14 @@ const Vehicles = () => {
     const [catsSelected, setCatsSelected] = React.useState([]);
     const [odoRange, setOdoRange] = React.useState([0, 70000]);
     const [rego, setRego] = React.useState('');
+
+    const cat = useAllStore((state) => state.category);
+    const setCat = useAllStore((state) => state.setCategory);
+    console.log(cat);
+    if (cat) {
+        setCat(null);
+        setCatsSelected([cat]);
+    }
 
     // get vehicles
     React.useEffect(() => {

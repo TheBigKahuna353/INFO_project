@@ -28,3 +28,4 @@
 - make pagination work for all pages
 - be able to change the per page
 - make tables for each page???
+- change SessionStorage to useStore

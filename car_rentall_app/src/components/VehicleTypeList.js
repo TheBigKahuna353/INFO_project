@@ -1,9 +1,11 @@
 import React from 'react';
 import { Card, CardMedia, CardActionArea } from "@mui/material"
 
-
+import useAllStore from '../utils/store';
 
 const VehicleTypeList = (props) => {
+
+    const setCategory = useAllStore((state) => state.setCategory);
 
     if (props.cats.count === 0) {
         return <div>
@@ -21,7 +23,14 @@ const VehicleTypeList = (props) => {
     }
 
     const onClick = (event) => {
-        console.log(event);
+        let name;
+        if (event.target.tagName !== "DIV") {
+            name = event.target.parentElement.id;
+        } else {
+            name = event.target.id;
+        }
+        setCategory(name);
+        window.location.href = '/vehicles';
     }
 
     return (
@@ -29,18 +38,20 @@ const VehicleTypeList = (props) => {
             <h1>Categories</h1>
             <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-around"}}>
                 {cats.map((cat) => (
-                    <div key={cat.category} style={{margin: "10px"}} href='/'>
+                    <div key={cat.category} style={{margin: "10px"}}>
                             <Card>
                                 <CardActionArea onClick={onClick}>
-                                    <CardMedia 
-                                        component="img" 
-                                        height="250"
-                                        width="250"
-                                        sx={{objectFit:"cover"}}
-                                        image={getURL(cat.category)} 
-                                        alt="Vehicle Image" />
-                                    <h1>{capitalize(cat.category)}</h1>
-                                    <p>From ${cat.price}</p>
+                                    <div id={cat.category}>
+                                        <CardMedia 
+                                            component="img" 
+                                            height="250"
+                                            width="250"
+                                            sx={{objectFit:"cover"}}
+                                            image={getURL(cat.category)} 
+                                            alt={cat.category} />
+                                        <h1>{capitalize(cat.category)}</h1>
+                                        <p>From ${cat.price}</p>
+                                    </div>
                                 </CardActionArea>
                             </Card>
                     </div>
