@@ -67,8 +67,12 @@ function getVehicles()
     }
     if (isset($_GET['rego'])) {
         $rego = $_GET['rego'];
-        $query .= " vehicle_rego LIKE '$rego%'";
-        $countQuery .= " vehicle_rego LIKE '$rego%'";
+        $query .= " vehicle_rego LIKE '$rego%' AND";
+        $countQuery .= " vehicle_rego LIKE '$rego%' AND";
+    }
+    if (isset($_GET['due'])) {
+        $query .= " vehicle_rego IN (SELECT vehicle_rego FROM maintenance_due)";
+        $countQuery .= " vehicle_rego IN (SELECT vehicle_rego FROM maintenance_due)";
     }
     $query = rtrim($query, "AND ");
     $query = rtrim($query, "WHERE ");

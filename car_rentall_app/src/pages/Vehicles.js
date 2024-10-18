@@ -34,6 +34,7 @@ const Vehicles = () => {
     const [catsSelected, setCatsSelected] = React.useState([]);
     const [odoRange, setOdoRange] = React.useState([0, 70000]);
     const [rego, setRego] = React.useState('');
+    const [showDue, setShowDue] = React.useState(false);
 
     const cat = useAllStore((state) => state.category);
     const setCat = useAllStore((state) => state.setCategory);
@@ -51,16 +52,18 @@ const Vehicles = () => {
                 cats: catsSelected,
                 minOdo: odoRange[0],
                 maxOdo: odoRange[1],
+                due: showDue ? true : null,
                 rego: rego === '' ? null : rego
             }
         })
         .then(function (response) {
+            console.log(response.data);
             setVehicles(response.data);
         })
         .catch(function (error) {
             console.log(error);
         });
-    }, [page, catsSelected, odoRange, rego, pageSize]);
+    }, [page, catsSelected, odoRange, rego, pageSize, showDue]);
 
     // get categories
     React.useEffect(() => {
@@ -100,6 +103,13 @@ const Vehicles = () => {
             <AppBar/>
             <h1>Vehicles</h1>
             <p>{vehicles.count} vehicles found</p>
+            <div style={{display:"inline-flex"}}>
+                <p>Show in need of maintenance</p>
+                <Checkbox
+                    checked={showDue}
+                    onChange={(event) => setShowDue(event.target.checked)}
+                />
+            </div>
             <div>
                 <FormControl sx={{ m: 1, width: 150}}>
                     <InputLabel htmlFor="outlined-adornment-amount">Rego</InputLabel>

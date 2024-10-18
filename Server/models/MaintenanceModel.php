@@ -104,21 +104,7 @@ function getallMain() {
     return '{"count":' . $count . ',"maintenances":' . $mains . '}';
 }
 
-function getDue() {
-    $pdo = openConnection();
-    $query = "SELECT * FROM maintenance_due";
-    try {
-        $result = $pdo->query($query);
-    } catch (PDOException $e) {
-        fatalError($e->getMessage());
-        return;
-    }
-    return json_encode($result->fetchAll());
-}
-
-if (isset($_GET['due'])) {
-    echo getDue();
-} else if (isset($_GET['id'])) {
+if (isset($_GET['id'])) {
     echo getSingle();
 } else {
     echo getallMain();
