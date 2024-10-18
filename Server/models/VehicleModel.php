@@ -78,9 +78,11 @@ function getVehicles()
 	$query = "SELECT 
                 vehicle_category AS category,
                 odometer,
-                commissioned,
-                decommissioned
+                S.date AS commissioned,
+                E.date AS decommissioned
             FROM vehicle
+            JOIN sim_day_date S ON S.sim_day = commissioned
+            JOIN sim_day_date E ON E.sim_day = decommissioned
             WHERE vehicle_rego = '$rego'";
     try {
         $result = $pdo->query($query);
@@ -98,10 +100,7 @@ function getVehicles()
     echo '"category": "' . htmlspecialchars($row['category']) . '",';
     echo '"odometer": "' . htmlspecialchars($row['odometer']) . '",';
     echo '"commissioned": "' . htmlspecialchars($row['commissioned']) . '",';
-    echo '"decommissioned": "' . htmlspecialchars($row['decommissioned']) . '",';
-    echo '"trips": ' . getTrips($rego) . ',';
-    echo '"relocations": ' . getRelocations($rego) . ',';
-    echo '"maintenance": ' . getMaintenance($rego);
+    echo '"decommissioned": "' . htmlspecialchars($row['decommissioned']) . '"';
     echo '}';
     
 }

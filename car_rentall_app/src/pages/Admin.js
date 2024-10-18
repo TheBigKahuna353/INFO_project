@@ -35,7 +35,7 @@ export default function Admin() {
             ...changedRow
         }}).then(function (response) {
             if (response.data.error) {
-                console.log(response.data.error);
+                console.log(response.data);
             }
             console.log(response.data);
         }).catch(function (error) {

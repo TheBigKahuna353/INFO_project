@@ -13,7 +13,6 @@ const AppBar = () => {
 
     const [imageURL, setImageURL] = React.useState(null);
     React.useEffect(() => {
-        console.log(loggedIn);
         if (!loggedIn) {
             return;
         }

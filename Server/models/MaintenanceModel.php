@@ -11,13 +11,12 @@ function getSingle() {
     $query = "SELECT 
                 start_date,
                 end_date,
-                origin,
-                destination,
-                distance,
+                location,
+                mileage,
                 vehicle_rego AS rego,
-                relocation_id AS id
-            FROM relocation_whole
-            WHERE relocation_id = $id";
+                maintenance_id AS id
+            FROM maintenance_whole
+            WHERE maintenance_id = $id";
     try {
         $result = $pdo->query($query);
     } catch (PDOException $e) {
@@ -27,22 +26,23 @@ function getSingle() {
     return json_encode($result->fetch());
 }
 
-function getallRelocations() {
+function getallMain() {
 
     // startIndex = 0
     // num = 50
+    // 
 
     // Execute select query onto the database
     $pdo = openConnection();
     $query = "SELECT 
                 start_date,
                 end_date,
-                origin,
-                destination,
-                distance,
+                location,
+                mileage,
+                vehicle_category AS category,
                 vehicle_rego AS rego,
-                relocation_id AS id
-            FROM relocation_whole WHERE ";
+                maintenance_id AS id
+            FROM maintenance_whole WHERE ";
     if (isset($_GET['start_date'])) {
         $start_date = $_GET['start_date'];
         $query .= " start_date = '$start_date' AND";
@@ -51,24 +51,24 @@ function getallRelocations() {
         $end_date = $_GET['end_date'];
         $query .= " end_date = '$end_date' AND";
     }
-    if (isset($_GET['origin'])) {
-        $origin = $_GET['origin'];
-        $query .= " origin = '$origin' AND";
+    if (isset($_GET['location'])) {
+        $location = $_GET['location'];
+        $query .= " location = '$location' AND";
     }
-    if (isset($_GET['destination'])) {
-        $destination = $_GET['destination'];
-        $query .= " destination = '$destination' AND";
-    }
-    if (isset($_GET['distance'])) {
-        $distance = $_GET['distance'];
-        $query .= " distance = $distance AND";
+    if (isset($_GET['mileage'])) {
+        $mileage = $_GET['mileage'];
+        $query .= " mileage = $mileage AND";
     }
     if (isset($_GET['rego'])) {
         $rego = $_GET['rego'];
-        $query .= " vehicle_rego LIKE '$rego' AND";
+        $query .= " vehicle_rego = '$rego' AND";
     }
-    $query = rtrim($query, "AND ");
-    $query = rtrim($query, "WHERE ");
+    if (isset($_GET['category'])) {
+        $category = $_GET['category'];
+        $query .= " vehicle_category = '$category' AND";
+    }
+    $query = rtrim($query, "AND");
+    $query = rtrim($query, "WHERE");
     if (isset($_GET['num'])) {
         $num = $_GET['num'];
         $query .= " LIMIT $num";
@@ -94,7 +94,7 @@ function getallRelocations() {
 if (isset($_GET['id'])) {
     echo getSingle();
 } else {
-    echo getallRelocations();
+    echo getallMain();
 }
 
 ?>

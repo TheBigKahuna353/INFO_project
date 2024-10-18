@@ -6,7 +6,8 @@ header('Content-Type: image/png');
 
 if (!isset($_GET['type'])) {
     header('HTTP/1.0 400 Bad Request');
-    echo 'Missing Type';
+    header('Content-Type: text/plain');
+    echo 'ERROR: Missing Type';
     return;
 }
 $type = $_GET['type'];

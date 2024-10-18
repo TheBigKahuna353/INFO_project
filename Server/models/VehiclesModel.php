@@ -21,9 +21,12 @@ function getVehicles()
                 vehicle_rego AS rego,
                 vehicle_category AS category,
                 odometer,
-                commissioned,
-                decommissioned
-            FROM vehicle WHERE";
+                S.date AS commissioned,
+                E.date AS decommissioned
+            FROM vehicle
+            LEFT JOIN sim_day_date S ON S.sim_day = commissioned
+            LEFT JOIN sim_day_date E ON E.sim_day = decommissioned
+            WHERE";
     $countQuery = "SELECT COUNT(vehicle_rego) as count FROM vehicle WHERE";
     if (isset($_GET['cats'])) {
         $cats = $_GET['cats'];
@@ -67,14 +70,10 @@ function getVehicles()
         $query .= " vehicle_rego LIKE '$rego%'";
         $countQuery .= " vehicle_rego LIKE '$rego%'";
     }
-    if ($query[strlen($query) - 1] == 'D' && $query[strlen($query) - 2] == 'N' && $query[strlen($query) - 3] == 'A') {
-        $query = substr($query, 0, strlen($query) - 4);
-        $countQuery = substr($countQuery, 0, strlen($countQuery) - 4);
-    }
-    if ($query[strlen($query) - 1] == 'E' && $query[strlen($query) - 2] == 'R' && $query[strlen($query) - 3] == 'E') {
-        $query = substr($query, 0, strlen($query) - 6);
-        $countQuery = substr($countQuery, 0, strlen($countQuery) - 6);
-    }
+    $query = rtrim($query, "AND ");
+    $query = rtrim($query, "WHERE ");
+    $countQuery = rtrim($countQuery, "AND ");
+    $countQuery = rtrim($countQuery, "WHERE ");
     if (isset($_GET['num'])) {
         $num = $_GET['num'];
         $query .= " LIMIT $num";
@@ -91,7 +90,7 @@ function getVehicles()
     } catch (PDOException $e) {
         fatalError($e->getMessage());
         http_response_code(500);
-        echo $query;
+        echo $countQuery;
         return;
     }
     $i = 0;

@@ -44,7 +44,6 @@ const Vehicles = () => {
 
     // get vehicles
     React.useEffect(() => {
-        console.log(catsSelected);
         axios.get('http://localhost:80/INFO_project/Server/models/VehiclesModel.php', {
             params: {
                 startIndex: (page - 1) * pageSize,
@@ -52,7 +51,7 @@ const Vehicles = () => {
                 cats: catsSelected,
                 minOdo: odoRange[0],
                 maxOdo: odoRange[1],
-                rego: rego
+                rego: rego === '' ? null : rego
             }
         })
         .then(function (response) {
