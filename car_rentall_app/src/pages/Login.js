@@ -115,7 +115,7 @@ export default function SignIn(props) {
       password: data.get('password'),
     });
     event.preventDefault();
-    axios.post('http://localhost:80/INFO_project/Server/models/UserModal.php', {
+    axios.post('http://localhost:80/INFO_project-main/Server/models/UserModal.php', {
         method: 'login',
         email: data.get('email'),
         password: data.get('password')

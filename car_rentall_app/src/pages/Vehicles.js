@@ -45,7 +45,7 @@ const Vehicles = () => {
 
     // get vehicles
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/VehiclesModel.php', {
+        axios.get('http://localhost:80/INFO_project-main/Server/models/VehiclesModel.php', {
             params: {
                 startIndex: (page - 1) * pageSize,
                 num: pageSize,
@@ -57,7 +57,6 @@ const Vehicles = () => {
             }
         })
         .then(function (response) {
-            console.log(response.data);
             setVehicles(response.data);
         })
         .catch(function (error) {
@@ -67,7 +66,7 @@ const Vehicles = () => {
 
     // get categories
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/CategoriesModel.php')
+        axios.get('http://localhost:80/INFO_project-main/Server/models/CategoriesModel.php')
         .then(function (response) {
             setCats(response.data);
         })

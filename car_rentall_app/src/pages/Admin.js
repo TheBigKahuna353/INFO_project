@@ -28,7 +28,7 @@ export default function Admin() {
                 changedRow[key] = newRow[key];
             }
         }
-        axios.post('http://localhost:80/INFO_project/Server/models/AdminModel.php' , { params: {
+        axios.post('http://localhost:80/INFO_project-main/Server/models/AdminModel.php' , { params: {
             method: 'writeData',
             auth_token: auth_token,
             category: oldRow.vehicle_category,
@@ -46,7 +46,7 @@ export default function Admin() {
     }
 
     React.useEffect(() => {
-        axios.post('http://localhost:80/INFO_project/Server/models/AdminModel.php' , { params: {
+        axios.post('http://localhost:80/INFO_project-main/Server/models/AdminModel.php' , { params: {
             method: 'getData',
             auth_token: auth_token
         }}

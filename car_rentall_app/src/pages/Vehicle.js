@@ -21,7 +21,7 @@ const Vehicle = () => {
     const [pages, setPages] = React.useState([1, 1, 1]);
 
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/VehicleModel.php?rego=' + rego)
+        axios.get('http://localhost:80/INFO_project-main/Server/models/VehicleModel.php?rego=' + rego)
         .then(function (response) {
             setVehicle(response.data);
         })
@@ -30,7 +30,7 @@ const Vehicle = () => {
         });
     }, [rego]);
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/TripsModel.php?rego=' + rego, {params: {num: 3, startIndex: (pages[0] - 1) * 3}})
+        axios.get('http://localhost:80/INFO_project-main/Server/models/TripsModel.php?rego=' + rego, {params: {num: 3, startIndex: (pages[0] - 1) * 3}})
         .then(function (response) {
             setTrips(response.data);
         })
@@ -39,7 +39,7 @@ const Vehicle = () => {
         });
     }, [rego, pages[0]]);
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/MaintenanceModel.php?rego=' + rego, {params: {num: 3, startIndex: (pages[1] - 1) * 3}})
+        axios.get('http://localhost:80/INFO_project-main/Server/models/MaintenanceModel.php?rego=' + rego, {params: {num: 3, startIndex: (pages[1] - 1) * 3}})
         .then(function (response) {
             setMaintenance(response.data);
         })
@@ -48,7 +48,7 @@ const Vehicle = () => {
         });
     }, [rego, pages[1]]);
 React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/RelocationsModel.php?rego=' + rego, {params: {num: 3, startIndex: (pages[2] - 1) * 3}})
+        axios.get('http://localhost:80/INFO_project-main/Server/models/RelocationsModel.php?rego=' + rego, {params: {num: 3, startIndex: (pages[2] - 1) * 3}})
         .then(function (response) {
             setRelocations(response.data);
         })
@@ -66,7 +66,7 @@ React.useEffect(() => {
         );
     }
 
-    const URL = "http://localhost:80/INFO_project/Server/models/ImageModel.php?type=" + vehicle.category
+    const URL = "http://localhost:80/INFO_project-main/Server/models/ImageModel.php?type=" + vehicle.category
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

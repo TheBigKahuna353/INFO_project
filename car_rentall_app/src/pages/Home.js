@@ -20,7 +20,7 @@ const Home = () => {
 
     // fetch data from the server
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/HomeModel.php')
+        axios.get('http://localhost:80/INFO_project-main/Server/models/HomeModel.php')
         .then(function (response) {
             console.log(response.data);
             setData(response.data);

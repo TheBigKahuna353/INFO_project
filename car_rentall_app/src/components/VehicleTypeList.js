@@ -15,7 +15,7 @@ const VehicleTypeList = (props) => {
     }
     let cats = props.cats;
     
-    const getURL = (category) => "http://localhost/INFO_project/Server/models/ImageModel.php?type=" + category;
+    const getURL = (category) => "http://localhost/INFO_project-main/Server/models/ImageModel.php?type=" + category;
 
     // this function replaces '_' with ' ' and capitalizes the first letter of each word
     const capitalize = (str) => {

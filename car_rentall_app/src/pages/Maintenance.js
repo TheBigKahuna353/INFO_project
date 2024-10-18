@@ -21,7 +21,7 @@ const Maintenance = () => {
     const { id } = useParams();
 
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/MaintenanceModel.php', {
+        axios.get('http://localhost:80/INFO_project-main/Server/models/MaintenanceModel.php', {
             params: {
                 id: id
             }

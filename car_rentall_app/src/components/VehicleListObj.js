@@ -3,7 +3,7 @@ import { Paper, Card, CardMedia, CardActionArea } from "@mui/material"
 
 const VehicleListObj = (vehicle) => {
 
-    const imageURL = "http://localhost/INFO_project/Server/models/ImageModel.php?type=" + vehicle.category;
+    const imageURL = "http://localhost/INFO_project-main/Server/models/ImageModel.php?type=" + vehicle.category;
 
         // this function replaces '_' with ' ' and capitalizes the first letter of each word
         const capitalize = (str) => {

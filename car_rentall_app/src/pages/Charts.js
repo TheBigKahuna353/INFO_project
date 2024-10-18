@@ -16,7 +16,7 @@ const Charts = () => {
     const [lifetimeData, setLifetimeData] = React.useState(null);
 
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/ChartsModel.php')
+        axios.get('http://localhost:80/INFO_project-main/Server/models/ChartsModel.php')
         .then(function (response) {
             console.log(response.data);
             setQuarterlyData(response.data.quarterly);

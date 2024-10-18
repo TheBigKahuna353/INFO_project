@@ -11,7 +11,7 @@ const Maintenances = () => {
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/MaintenanceModel.php', {
+        axios.get('http://localhost:80/INFO_project-main/Server/models/MaintenanceModel.php', {
             params: {
                 startIndex: (page - 1) * 50,
                 num: 50

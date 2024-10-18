@@ -23,7 +23,7 @@ const Trip = () => {
     const { trip_id } = useParams();
 
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/TripsModel.php', {
+        axios.get('http://localhost:80/INFO_project-main/Server/models/TripsModel.php', {
             params: {
                 trip_id: trip_id
             }

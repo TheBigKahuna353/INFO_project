@@ -16,7 +16,7 @@ const AppBar = () => {
         if (!loggedIn) {
             return;
         }
-        axios.post('http://localhost:80/INFO_project/Server/models/UserModal.php', {
+        axios.post('http://localhost:80/INFO_project-main/Server/models/UserModal.php', {
             params: {
                 method: 'image',
                 auth_token: authToken
@@ -43,7 +43,7 @@ const AppBar = () => {
     const handleCloseUserMenu = (event) => {
         setAnchorElUser(null);
         if (event.target.textContent === 'Logout') {
-            axios.post('http://localhost:80/INFO_project/Server/models/UserModal.php', {
+            axios.post('http://localhost:80/INFO_project-main/Server/models/UserModal.php', {
                 method: 'logout',
                 auth_token: authToken
             }).then(function (response) {

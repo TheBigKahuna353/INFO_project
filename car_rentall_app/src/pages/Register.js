@@ -131,7 +131,7 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
     event.preventDefault();
     // register
-    axios.post('http://localhost:80/INFO_project/Server/models/UserModal.php', {
+    axios.post('http://localhost:80/INFO_project-main/Server/models/UserModal.php', {
         method: 'register',
         first_name: data.get('name').split(' ')[0],
         last_name: data.get('name').split(' ')[1],
@@ -140,7 +140,7 @@ export default function SignUp() {
         })
     .then(function (response) {
         // now login
-        axios.post('http://localhost:80/INFO_project/Server/models/UserModal.php', {
+        axios.post('http://localhost:80/INFO_project-main/Server/models/UserModal.php', {
             method: 'login',
             email: data.get('email'),
             password: data.get('password')

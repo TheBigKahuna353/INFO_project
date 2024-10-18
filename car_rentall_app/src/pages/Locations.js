@@ -9,7 +9,7 @@ const Locations = () => {
     const [locations, setLocations] = React.useState([]);
 
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/LocationsModel.php')
+        axios.get('http://localhost:80/INFO_project-main/Server/models/LocationsModel.php')
         .then(function (response) {
             setLocations(response.data);
         })

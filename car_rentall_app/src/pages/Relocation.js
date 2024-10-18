@@ -21,7 +21,7 @@ const Relocation = () => {
     const { id } = useParams();
 
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project/Server/models/RelocationsModel.php', {
+        axios.get('http://localhost:80/INFO_project-main/Server/models/RelocationsModel.php', {
             params: {
                 id: id
             }
