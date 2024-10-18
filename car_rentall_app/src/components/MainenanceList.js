@@ -1,8 +1,8 @@
 import React from 'react';
-import RelocationListObj from './RelocationListObj';
+import MaintenanceListObj from './MaintenanceListObj';
 
 
-const RelocationList = ({relocations}) => {
+const MaintenanceList = ({maintenance}) => {
 
     const card = {
         padding: "10px",
@@ -13,20 +13,19 @@ const RelocationList = ({relocations}) => {
         position: "relative",
     }
 
-    if (relocations.count === 0) {
+    if (maintenance.count === 0) {
         return <div>
             <h1>Relocations</h1>
             <p>Loading...</p>
         </div>
     }
 
-    console.log(relocations);
     return (
         <div style={{}}>
             <div style={{}}>
-                {relocations.map((relocation) => (
-                    <div key={relocation.rego+relocation.id} style={card}>
-                        <RelocationListObj {...relocation}/>
+                {maintenance.map((main) => (
+                    <div key={main.rego+main.id} style={card}>
+                        <MaintenanceListObj {...main}/>
                     </div>
                 ))}
             </div>
@@ -34,4 +33,4 @@ const RelocationList = ({relocations}) => {
     );
 }
 
-export default RelocationList;
+export default MaintenanceList;

@@ -96,18 +96,6 @@ function getVehicles()
     $i = 0;
     echo '{"vehicles": ';
     echo json_encode($result->fetchall());
-    while ($row = $result->fetch()) {
-        $i++;
-        $data[] = [
-            'rego' => htmlspecialchars($row['rego']),
-            'category' => htmlspecialchars($row['category']),
-            'odometer' => htmlspecialchars($row['odometer']),
-            'commisioned' => htmlspecialchars($row['commissioned']),
-            'decommisioned' => htmlspecialchars($row['decommissioned']),
-        ];
-        // echo json_encode($data[0]);
-        if ($i < 50) echo ',';
-    }
     echo ', ';
     echo '"count": ' . $count->fetch()['count'];
     echo '}';

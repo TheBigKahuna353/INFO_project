@@ -25,7 +25,7 @@ const TripsList = (props) => {
         <div style={{}}>
             <div style={{}}>
                 {trips.map((trip) => (
-                    <div key={trip.rego} style={card}>
+                    <div key={trip.rego+trip.start_date} style={card}>
                         <TripsListObj trip={trip}/>
                     </div>
                 ))}
