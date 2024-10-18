@@ -39,7 +39,7 @@ function login($email, $password) {
     $result = $stmt->fetch();
     $stmt->closeCursor();
     if (password_verify($password, $result['password'])) {
-        return json_encode(['token' => create_auth_token($result['user_id'])]);
+        return json_encode(['auth_token' => create_auth_token($result['user_id'])]);
     } else {
         return json_encode(['error' => 'Invalid username or password']);
     }
@@ -137,7 +137,8 @@ function get_image($auth_token) {
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-
+// Post requests are funny with params, so we need to check if the method is set
+// If not, could be stored in a params key
 if (!isset($data['method'])) {
     if (!isset($data['params'])) {
         echo json_encode(['error' => 'No action specified']);
@@ -145,19 +146,26 @@ if (!isset($data['method'])) {
     }
     $data = $data['params'];
 }
-if ($data['method'] === 'login') {
-    echo login($data['email'], $data['password']);
-} else if ($data['method'] === 'register') {
-    echo register($data['first_name'], $data['last_name'], $data['email'], $data['password']);
-} else if ($data['method'] === 'logout') {
-    echo logout($data['auth_token']);
-} else if ($data['method'] === 'set_password') {
-    echo set_password($data['email'], $data['password']);
-} else if ($data['method'] === 'image') {
-    echo get_image($data['auth_token']);
-} else {
-    echo json_encode(['error' => 'Invalid action']);
-    header('HTTP/1.1 400 Bad Request');
+
+switch ($data['method']) {
+    case 'login':
+        echo login($data['email'], $data['password']);
+        break;
+    case 'register':
+        echo register($data['first_name'], $data['last_name'], $data['email'], $data['password']);
+        break;
+    case 'set_password':
+        echo set_password($data['email'], $data['password']);
+        break;
+    case 'logout':
+        echo logout($data['auth_token']);
+        break;
+    case 'image':
+        echo get_image($data['auth_token']);
+        break;
+    default:
+        echo json_encode(['error' => 'Invalid action specified', 'method' => $data['method']]);
+        break;
 }
 
 ?>

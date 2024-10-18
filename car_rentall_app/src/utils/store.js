@@ -1,13 +1,15 @@
 import create from 'zustand';
 
 
-const getLocalLoggedIn = () => JSON.parse(localStorage.getItem('loggedIn'));
-const getLocalAuthToken = () => JSON.parse(localStorage.getItem('auth_token'));
+const getLocalLoggedIn = () => localStorage.getItem('loggedIn');
+const getLocalAuthToken = () => localStorage.getItem('auth_token');
 const getLocalCategory = () => JSON.parse(localStorage.getItem('category'));
+const getLocalDarkMode = () => localStorage.getItem('darkMode');
 
-const setLocalLoggedIn = (value) => localStorage.setItem('loggedIn', JSON.stringify(value));
-const setLocalAuthToken = (value) => localStorage.setItem('auth_token', JSON.stringify(value));
+const setLocalLoggedIn = (value) => localStorage.setItem('loggedIn', value);
+const setLocalAuthToken = (value) => localStorage.setItem('auth_token', value);
 const setLocalCategory = (value) => localStorage.setItem('category', JSON.stringify(value));
+const setLocalDarkMode = (value) => localStorage.setItem('darkMode', value);
 
 const useAllStore = create((set) => ({
     loggedIn: getLocalLoggedIn() || false,
@@ -24,6 +26,11 @@ const useAllStore = create((set) => ({
     setCategory: (value) => {
         setLocalCategory(value);
         set({category: value});
+    },
+    darkMode: getLocalDarkMode() || false,
+    setDarkMode: (value) => {
+        setLocalDarkMode(value);
+        set({darkMode: value});
     }
 }));
 

@@ -1,33 +1,39 @@
 import React from 'react';
 import { AppBar as Bar, Button, ButtonGroup, Toolbar, Typography, Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Link } from '@mui/material';
 import axios from 'axios';
-
+import useAllStore from '../utils/store';
 
 const AppBar = () => {
 
-    const [loggedIn, setLoggedIn] = React.useState(sessionStorage.getItem('LoggedIn') === 'true');
+    const loggedIn = useAllStore((state) => state.loggedIn);
+    const setLoggedIn = useAllStore((state) => state.setLoggedIn);
 
-    const defaultUserImageURL = 'https://png.pngitem.com/pimgs/s/150-1503945_transparent-user-png-default-user-image-png-png.png'
+    const setAuthToken = useAllStore((state) => state.setAuthToken);
+    const authToken = useAllStore((state) => state.auth_token);
 
-    const [imageURL, setImageURL] = React.useState(defaultUserImageURL);
+    const [imageURL, setImageURL] = React.useState(null);
     React.useEffect(() => {
+        console.log(loggedIn);
         if (!loggedIn) {
             return;
         }
         axios.post('http://localhost:80/INFO_project/Server/models/UserModal.php', {
             params: {
                 method: 'image',
-                auth_token: sessionStorage.getItem('auth_token')
+                auth_token: authToken
             }
         }).then(function (response) {
-            console.log(response.data);
+            if (response.data.error) {
+                console.log(response.data);
+                return;
+            }
             setImageURL(response.data.imageUrl);
         }).catch(function (error) {
             console.log(error);
         });
-    }, [loggedIn]);
+    }, [loggedIn, authToken]);
 
-    const settings = ['Settings', 'Logout'];
+    const settings = ['Admin', 'Logout'];
 
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -40,16 +46,15 @@ const AppBar = () => {
         if (event.target.textContent === 'Logout') {
             axios.post('http://localhost:80/INFO_project/Server/models/UserModal.php', {
                 method: 'logout',
-                auth_token: sessionStorage.getItem('auth_token')
+                auth_token: authToken
             }).then(function (response) {
-                sessionStorage.removeItem('auth_token');
-                sessionStorage.removeItem('LoggedIn');
                 setLoggedIn(false);
+                setAuthToken(null);
             }).catch(function (error) {
                 console.log(error);
             });
-        } else if (event.target.textContent === 'Settings') {
-            window.location.href = `/settings`
+        } else if (event.target.textContent === 'Admin') {
+            window.location.href = `/admin`
         }
         
     };

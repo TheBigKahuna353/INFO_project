@@ -10,7 +10,6 @@ const defaultData = {
     count: 0
 };
 
-const pageSize = 50; // need to change to dynamic
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -23,10 +22,13 @@ const MenuProps = {
   },
 };
 
+const pageSizeOptions = [10, 25, 50, 100];
+
 const Vehicles = () => {
 
     const [vehicles, setVehicles] = React.useState(defaultData);
     const [page, setPage] = React.useState(1);
+    const [pageSize, setPageSize] = React.useState(50);
     const [cats, setCats] = React.useState([]);
 
     const [catsSelected, setCatsSelected] = React.useState([]);
@@ -59,7 +61,7 @@ const Vehicles = () => {
         .catch(function (error) {
             console.log(error);
         });
-    }, [page, catsSelected, odoRange, rego]);
+    }, [page, catsSelected, odoRange, rego, pageSize]);
 
     // get categories
     React.useEffect(() => {
@@ -113,21 +115,21 @@ const Vehicles = () => {
             <FormControl sx={{ m: 1, width: 300}}>
                 <InputLabel id="demo-multiple-checkbox-label">Categories</InputLabel>
                 <Select
-                labelId="demo-multiple-checkbox-label"
-                id="demo-multiple-checkbox"
-                multiple
-                value={catsSelected}
-                onChange={handleChange}
-                input={<OutlinedInput label="Tag" />}
-                renderValue={(selected) => selected.join(', ')}
-                MenuProps={MenuProps}
-                >
-                {cats.map((name) => (
-                    <MenuItem key={name} value={name}>
-                    <Checkbox checked={catsSelected.includes(name)} />
-                    <ListItemText primary={name} />
-                    </MenuItem>
-                ))}
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={catsSelected}
+                    onChange={handleChange}
+                    input={<OutlinedInput label="Tag" />}
+                    renderValue={(selected) => selected.join(', ')}
+                    MenuProps={MenuProps}
+                    >
+                    {cats.map((name) => (
+                        <MenuItem key={name} value={name}>
+                        <Checkbox checked={catsSelected.includes(name)} />
+                        <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
                 </Select>
             </FormControl>
             <InputLabel id="range-slider" sx={{}}>Odometer range</InputLabel>
@@ -151,6 +153,22 @@ const Vehicles = () => {
                 onChange={(event, value) => setPage(value)}
                 style={{margin: "auto", justifyContent: "center", display: "flex"}}
                 />
+            <FormControl sx={{ m: 1}}>
+                <InputLabel id="pageSize-label">Page</InputLabel>
+                <Select
+                    input={<OutlinedInput label="Tag" />}
+                    labelId="pageSize-label"
+                    value={pageSize}
+                    onChange={(event) => setPageSize(event.target.value)}
+                    MenuProps={MenuProps}
+                    >
+                    {pageSizeOptions.map((size) => (
+                        <MenuItem key={size} value={size}>
+                        {size}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
             <VehicleList vehicles={vehicles.vehicles}/>
         </div>
     );

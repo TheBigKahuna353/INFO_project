@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import AppBar from '../components/AppBar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import useAllStore from '../utils/store';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -65,6 +66,9 @@ export default function SignUp() {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const navigate = useNavigate();
+
+  const setAuthToken = useAllStore((state) => state.setAuthToken);
+  const setLoggedIn = useAllStore((state) => state.setLoggedIn);
 
   // This code only runs on the client side, to determine the system color preference
   React.useEffect(() => {
@@ -146,8 +150,8 @@ export default function SignUp() {
                 console.log(response.data.error);
                 return;
             }
-            sessionStorage.setItem('auth_token', response.data.token);  
-            sessionStorage.setItem('LoggedIn', true);
+            setAuthToken(response.data.auth_token);
+            setLoggedIn(true);
             navigate('/');
         }).catch(function (error) {
             console.log(error);

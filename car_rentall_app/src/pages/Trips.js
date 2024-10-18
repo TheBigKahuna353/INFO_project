@@ -29,11 +29,10 @@ const Trips = () => {
     const [page, setPage] = React.useState(1);
 
     React.useEffect(() => {
-        axios.get('http://localhost:80/INFO_project-main/Server/models/TripsModel.php', {
+        axios.get('http://localhost:80/INFO_project/Server/models/TripsModel.php', {
             params: {
                 startIndex: (page - 1) * pageSize,
                 num: pageSize,
-                //"rego": "Z"
             }
         })
         .then(function (response) {

@@ -12,6 +12,8 @@ import Charts from './pages/Charts';
 import SignIn from './pages/Login';
 import SignUp from './pages/Register';
 import Locations from './pages/Locations';
+import Admin from './pages/Admin';
+
 
 // for each page, create a route, so it runs the code for the page
 function App() {
@@ -31,6 +33,7 @@ function App() {
           <Route path="/login" element={<SignIn/>} />
           <Route path="/register" element={<SignUp/>} />
           <Route path="/locations" element={<Locations/>} />
+          <Route path="/admin" element={<Admin/>} />
         </Routes>
       </Router>
     </div>
