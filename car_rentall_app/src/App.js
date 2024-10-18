@@ -14,6 +14,7 @@ import SignUp from './pages/Register';
 import Locations from './pages/Locations';
 import Admin from './pages/Admin';
 import Maintenance from './pages/Maintenance';
+import Maintenances from './pages/allMains';
 
 
 // for each page, create a route, so it runs the code for the page
@@ -36,6 +37,7 @@ function App() {
           <Route path="/locations" element={<Locations/>} />
           <Route path="/admin" element={<Admin/>} />
           <Route path="/maintenance/:id" element={<Maintenance/>} />
+          <Route path="/maintenance" element={<Maintenances/>} />
         </Routes>
       </Router>
     </div>

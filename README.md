@@ -15,11 +15,10 @@
 
 # TODO
 
-- add search/filters for all pages
-- add filters for relocations backend (need to copy and paste from othe files)
-- when click on lifetime graph, show vehicles in clicked bin
+- add search/filters for relocations, trips and maintenance
+
+- when click on lifetime graph, show vehicles in clicked bin (not going to do)
 - Display a list vehicles in need of maintenance (perhaps in maintainence page?)
-- make list objects look nicer
-  - add pictures?
+
 - make pagination work for all pages
-- make tables for each page???
+- make tables for each page??? (not going to do)

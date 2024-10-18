@@ -70,6 +70,7 @@ const AppBar = () => {
                     <Button href="/vehicles">Vehicles</Button>
                     <Button href="/relocations">Relocations</Button>
                     <Button href="/trips">Trips</Button>
+                    <Button href="/maintenance">Maintenance</Button>
                     <Button href="/charts">Charts</Button>
                     <Button href="/locations">Locations</Button>
                 </ButtonGroup>

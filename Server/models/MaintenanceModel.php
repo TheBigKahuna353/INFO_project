@@ -74,10 +74,10 @@ function getallMain() {
         $query .= " vehicle_category = '$category' AND";
         $countQuery .= " vehicle_category = '$category' AND";
     }
-    $query = rtrim($query, "AND");
-    $query = rtrim($query, "WHERE");
-    $countQuery = rtrim($countQuery, "AND");
-    $countQuery = rtrim($countQuery, "WHERE");
+    $query = rtrim($query, "AND ");
+    $query = rtrim($query, "WHERE ");
+    $countQuery = rtrim($countQuery, "AND ");
+    $countQuery = rtrim($countQuery, "WHERE ");
     if (isset($_GET['num'])) {
         $num = $_GET['num'];
         $query .= " LIMIT $num";
@@ -95,6 +95,7 @@ function getallMain() {
         $result = $pdo->query($query);
         $count = $pdo->query($countQuery);
     } catch (PDOException $e) {
+        echo $query;
         fatalError($e->getMessage());
         return;
     }
@@ -103,7 +104,21 @@ function getallMain() {
     return '{"count":' . $count . ',"maintenances":' . $mains . '}';
 }
 
-if (isset($_GET['id'])) {
+function getDue() {
+    $pdo = openConnection();
+    $query = "SELECT * FROM maintenance_due";
+    try {
+        $result = $pdo->query($query);
+    } catch (PDOException $e) {
+        fatalError($e->getMessage());
+        return;
+    }
+    return json_encode($result->fetchAll());
+}
+
+if (isset($_GET['due'])) {
+    echo getDue();
+} else if (isset($_GET['id'])) {
     echo getSingle();
 } else {
     echo getallMain();
