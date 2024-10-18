@@ -85,6 +85,11 @@ React.useEffect(() => {
         justifyContent: "center",
     }
 
+    const getPages = (count) => {
+        const pages = Math.floor(count/3)
+        return pages === 1 ? 0 : pages
+    }
+
     return (
         <div>
             <AppBar/>
@@ -95,17 +100,19 @@ React.useEffect(() => {
             <h2>Odometer: {numberWithCommas(vehicle.odometer)}km</h2>
             <h2>Trips</h2>
             <Paper sx={css} elevation={11}>
-                <Pagination count={Math.floor(trips.count/3)} page={pages[0]} onChange={(event, value) => setPages([value, pages[1], pages[2]])} sx={pageCSS}/>
+                <Pagination count={getPages(trips.count)} page={pages[0]} onChange={(event, value) => setPages([value, pages[1], pages[2]])} sx={pageCSS}/>
                 <TripsList trips={trips.trips}/>
             </Paper>
             <h2>Maintenance</h2>
             <Paper sx={css} elevation={11}>
-                <MaintenanceList maintenance={maintenance}/>
+                <Pagination count={getPages(maintenance.count)} page={pages[1]} onChange={(event, value) => setPages([pages[0], value, pages[2]])} sx={pageCSS}/>
+                <MaintenanceList maintenance={maintenance.maintenances}/>
                 {maintenance.count === 0 ? <p>No relocations found</p> : null}
             </Paper>
             <h2>Relocations</h2>
             <Paper sx={css} elevation={11}>
-                <RelocationList relocations={relocations}/>
+                <Pagination count={getPages(relocations.count)} page={pages[2]} onChange={(event, value) => setPages([pages[0], pages[1], value])} sx={pageCSS}/>
+                <RelocationList relocations={relocations.relocations}/>
                 {relocations.count === 0 ? <p>No relocations found</p> : null}
             </Paper>
         </div>

@@ -43,32 +43,41 @@ function getallRelocations() {
                 vehicle_rego AS rego,
                 relocation_id AS id
             FROM relocation_whole WHERE ";
+    $countQuery = "SELECT COUNT(vehicle_rego) as count FROM relocation_whole WHERE ";
     if (isset($_GET['start_date'])) {
         $start_date = $_GET['start_date'];
         $query .= " start_date = '$start_date' AND";
+        $countQuery .= " start_date = '$start_date' AND";
     }
     if (isset($_GET['end_date'])) {
         $end_date = $_GET['end_date'];
         $query .= " end_date = '$end_date' AND";
+        $countQuery .= " end_date = '$end_date' AND";
     }
     if (isset($_GET['origin'])) {
         $origin = $_GET['origin'];
         $query .= " origin = '$origin' AND";
+        $countQuery .= " origin = '$origin' AND";
     }
     if (isset($_GET['destination'])) {
         $destination = $_GET['destination'];
         $query .= " destination = '$destination' AND";
+        $countQuery .= " destination = '$destination' AND";
     }
     if (isset($_GET['distance'])) {
         $distance = $_GET['distance'];
         $query .= " distance = $distance AND";
+        $countQuery .= " distance = $distance AND";
     }
     if (isset($_GET['rego'])) {
         $rego = $_GET['rego'];
         $query .= " vehicle_rego LIKE '$rego' AND";
+        $countQuery .= " vehicle_rego LIKE '$rego' AND";
     }
     $query = rtrim($query, "AND ");
     $query = rtrim($query, "WHERE ");
+    $countQuery = rtrim($countQuery, "AND ");
+    $countQuery = rtrim($countQuery, "WHERE ");
     if (isset($_GET['num'])) {
         $num = $_GET['num'];
         $query .= " LIMIT $num";
@@ -84,11 +93,14 @@ function getallRelocations() {
 
     try {
         $result = $pdo->query($query);
+        $count = $pdo->query($countQuery);
     } catch (PDOException $e) {
         fatalError($e->getMessage());
         return;
     }
-    return json_encode($result->fetchall());
+    $relocs = json_encode($result->fetchall());
+    $count = json_encode($count->fetch());
+    return '{"relocations": ' . $relocs . ', "count": ' . $count . '}';
 }
 
 if (isset($_GET['id'])) {

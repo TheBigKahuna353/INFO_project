@@ -18,7 +18,6 @@
 - add search/filters for all pages
 - add filters for relocations backend (need to copy and paste from othe files)
 - when click on lifetime graph, show vehicles in clicked bin
-- allow users to write to cost and rate tables
 - Display a list vehicles in need of maintenance (perhaps in maintainence page?)
 - make list objects look nicer
   - add pictures?

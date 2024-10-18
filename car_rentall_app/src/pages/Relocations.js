@@ -7,7 +7,7 @@ import RelocationList from '../components/RelocationList';
 
 const Relocations = () => {
 
-    const [relocations, setRelocations] = useState([]);
+    const [relocations, setRelocations] = useState(null);
     const [page, setPage] = useState(1);
 
     useEffect(() => {
@@ -18,8 +18,6 @@ const Relocations = () => {
             }
         })
         .then(function (response) {
-            console.log("recieved");
-            console.log("fetched:" + response.data);
             setRelocations(response.data);
         })
         .catch(function (error) {
@@ -27,11 +25,20 @@ const Relocations = () => {
         });
     }, [page]);
 
+    if (relocations === null) {
+        return (
+            <div>
+                <AppBar/>
+                <h1>Relocations</h1>
+            </div>
+        );
+    }
+
     return (
         <div>
             <AppBar/>
             <h1>Relocations</h1>
-            <RelocationList relocations={relocations}/>
+            <RelocationList relocations={relocations.relocations}/>
         </div>
     );
 }
