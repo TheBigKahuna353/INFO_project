@@ -100,7 +100,7 @@ function getallMain() {
         return;
     }
     $mains = json_encode($result->fetchAll());
-    $count = json_encode($count->fetch());
+    $count = $count->fetch()['count'];
     return '{"count":' . $count . ',"maintenances":' . $mains . '}';
 }
 

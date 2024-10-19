@@ -99,7 +99,7 @@ function getallRelocations() {
         return;
     }
     $relocs = json_encode($result->fetchall());
-    $count = json_encode($count->fetch());
+    $count = $count->fetch()['count'];
     return '{"relocations": ' . $relocs . ', "count": ' . $count . '}';
 }
 
