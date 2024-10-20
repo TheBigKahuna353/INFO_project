@@ -46,8 +46,8 @@ function getAll()
     $countQuery = "SELECT COUNT(vehicle_rego) as count FROM trip_whole WHERE ";
     if (isset($_GET['cats'])) {
         $cats = $_GET['cats'];
-        $query .= "category IN (";
-        $countQuery .= "ategory IN (";
+        $query .= " vehicle_category IN (";
+        $countQuery .= " vehicle_category IN (";
         $i = 0;
         foreach ($cats as $cat) {
             $query .= "'$cat'";
@@ -58,8 +58,8 @@ function getAll()
             }
             $i++;
         }
-        $query .= ') AND ';
-        $countQuery .= ') AND ';
+        $query .= ') AND';
+        $countQuery .= ') AND';
     }
     if (isset($_GET['startDate'])) {
         $startDate = $_GET['startDate'];
@@ -73,8 +73,8 @@ function getAll()
     }
     if (isset($_GET['rego'])) {
         $rego = $_GET['rego'];
-        $query .= "vehicle_rego LIKE '$rego%'";
-        $countQuery .= "vehicle_rego LIKE '$rego%'";
+        $query .= " vehicle_rego LIKE '$rego%' AND";
+        $countQuery .= " vehicle_rego LIKE '$rego%' AND";
     }
     $query = rtrim($query, "AND ");
     $query = rtrim($query, "WHERE ");
