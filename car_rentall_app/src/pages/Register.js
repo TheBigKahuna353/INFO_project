@@ -2,16 +2,14 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import AppBar from '../components/AppBar';
+import Link from '@mui/material/Link';
 import axios from 'axios';
+import AppBar from '../components/AppBar';
 import { useNavigate } from 'react-router-dom';
 import useAllStore from '../utils/store';
 
@@ -23,11 +21,11 @@ const Card = styled(MuiCard)(({ theme }) => ({
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: 'auto',
+  [theme.breakpoints.up('sm')]: {
+    maxWidth: '450px',
+  },
   boxShadow:
     'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-  [theme.breakpoints.up('sm')]: {
-    width: '450px',
-  },
   ...theme.applyStyles('dark', {
     boxShadow:
       'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
@@ -56,28 +54,21 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignUp() {
+const SignUpForm = () => {
   const [mode, setMode] = React.useState('light');
-  const defaultTheme = createTheme({ palette: { mode } });
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  const [firstNameError, setFirstNameError] = React.useState('');
+  const [surnameError, setSurnameError] = React.useState('');
+  const [emailError, setEmailError] = React.useState('');
+  const [passwordError, setPasswordError] = React.useState('');
   const navigate = useNavigate();
-
   const setAuthToken = useAllStore((state) => state.setAuthToken);
   const setLoggedIn = useAllStore((state) => state.setLoggedIn);
 
-  // This code only runs on the client side, to determine the system color preference
   React.useEffect(() => {
-    // Check if there is a preferred mode in localStorage
     const savedMode = localStorage.getItem('themeMode');
     if (savedMode) {
       setMode(savedMode);
     } else {
-      // If no preference is found, it uses system preference
       const systemPrefersDark = window.matchMedia(
         '(prefers-color-scheme: dark)',
       ).matches;
@@ -85,86 +76,84 @@ export default function SignUp() {
     }
   }, []);
 
-
-  const validateInputs = () => {
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    const name = document.getElementById('name');
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage('Name is required.');
-      isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage('');
-    }
-
-    return isValid;
-  };
-
   const handleSubmit = (event) => {
-    if (nameError || emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
     event.preventDefault();
-    // register
-    axios.post('http://localhost:80/INFO_project-main/Server/models/UserModal.php', {
+    const data = new FormData(event.currentTarget);
+
+    // Reset error messages
+    setFirstNameError('');
+    setSurnameError('');
+    setEmailError('');
+    setPasswordError('');
+
+    // Validation
+    let valid = true;
+
+    if (!data.get('first_name')) {
+      setFirstNameError('First Name is required');
+      valid = false;
+    }
+    if (!data.get('surname')) {
+      setSurnameError('Surname is required');
+      valid = false;
+    }
+    const email = data.get('email');
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      setEmailError('Email Address is required');
+      valid = false;
+    } else if (!emailPattern.test(email)) {
+      setEmailError('Enter a valid email address');
+      valid = false;
+    }
+    const password = data.get('password');
+    if (!password) {
+      setPasswordError('Password is required');
+      valid = false;
+    } else if (password.length < 6) {
+      setPasswordError('Password must be at least 6 characters long');
+      valid = false;
+    }
+
+    if (!valid) return; // Stop if validation fails
+
+    axios
+      .post('http://localhost:80/INFO_project-main/Server/models/UserModal.php', {
         method: 'register',
-        first_name: data.get('name').split(' ')[0],
-        last_name: data.get('name').split(' ')[1],
+        first_name: data.get('first_name'),
+        last_name: data.get('surname'),
         email: data.get('email'),
-        password: data.get('password')
-        })
-    .then(function (response) {
-        // now login
-        axios.post('http://localhost:80/INFO_project-main/Server/models/UserModal.php', {
-            method: 'login',
-            email: data.get('email'),
-            password: data.get('password')
-            })
-        .then(function (response) {
-            if (response.data.error) {
-                console.log(response.data.error);
-                return;
-            }
-            setAuthToken(response.data.auth_token);
-            setLoggedIn(true);
-            navigate('/');
-        }).catch(function (error) {
-            console.log(error);
-        })
-    }).catch(function (error) {
-        console.log(error);
-    })
+        password: data.get('password'),
+      })
+      .then((response) => {
+        if (response.data.error) {
+          console.error(response.data.error);
+          return;
+        }
+        return axios.post('http://localhost:80/INFO_project-main/Server/models/UserModal.php', {
+          method: 'login',
+          email: data.get('email'),
+          password: data.get('password'),
+        });
+      })
+      .then((loginResponse) => {
+        if (loginResponse.data.error) {
+          console.error(loginResponse.data.error);
+          return;
+        }
+        setAuthToken(loginResponse.data.auth_token);
+        setLoggedIn(true);
+        navigate('/');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
     <div>
-        <AppBar />
-      <ThemeProvider theme={defaultTheme}>
+      <AppBar />
+      <ThemeProvider theme={createTheme({ palette: { mode } })}>
         <CssBaseline enableColorScheme />
         <SignUpContainer direction="column" justifyContent="space-between">
           <Card variant="outlined">
@@ -173,77 +162,73 @@ export default function SignUp() {
               variant="h4"
               sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
             >
-              Sign up
+              Sign Up
             </Typography>
             <Box
               component="form"
               onSubmit={handleSubmit}
-              sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+              noValidate
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: '100%',
+                gap: 2,
+              }}
             >
-              <FormControl>
-                <FormLabel htmlFor="name">Full name</FormLabel>
-                <TextField
-                  autoComplete="name"
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  placeholder="Jon Snow"
-                  error={nameError}
-                  helperText={nameErrorMessage}
-                  color={nameError ? 'error' : 'primary'}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel htmlFor="email">Email</FormLabel>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  placeholder="your@email.com"
-                  name="email"
-                  autoComplete="email"
-                  variant="outlined"
-                  error={emailError}
-                  helperText={emailErrorMessage}
-                  color={passwordError ? 'error' : 'primary'}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  placeholder="••••••"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  variant="outlined"
-                  error={passwordError}
-                  helperText={passwordErrorMessage}
-                  color={passwordError ? 'error' : 'primary'}
-                />
-              </FormControl>
+              <TextField
+                id="first_name"
+                label="First Name"
+                name="first_name"
+                required
+                fullWidth
+                variant="outlined"
+                error={!!firstNameError}
+                helperText={firstNameError}
+              />
+              <TextField
+                id="surname"
+                label="Surname"
+                name="surname"
+                required
+                fullWidth
+                variant="outlined"
+                error={!!surnameError}
+                helperText={surnameError}
+              />
+              <TextField
+                id="email"
+                label="Email Address"
+                name="email"
+                required
+                fullWidth
+                type="email"
+                variant="outlined"
+                error={!!emailError}
+                helperText={emailError}
+              />
+              <TextField
+                id="password"
+                label="Password"
+                name="password"
+                required
+                fullWidth
+                type="password"
+                variant="outlined"
+                error={!!passwordError}
+                helperText={passwordError}
+              />
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                onClick={validateInputs}
               >
-                Sign up
+                Sign Up
               </Button>
               <Typography sx={{ textAlign: 'center' }}>
                 Already have an account?{' '}
-                <span>
-                  <Link
-                    href="/login"
-                    variant="body2"
-                    sx={{ alignSelf: 'center' }}
-                  >
-                    Sign in
-                  </Link>
-                </span>
+                <Link href="/login" variant="body2">
+                  Sign in
+                </Link>
               </Typography>
             </Box>
           </Card>
@@ -251,4 +236,6 @@ export default function SignUp() {
       </ThemeProvider>
     </div>
   );
-}
+};
+
+export default SignUpForm;
