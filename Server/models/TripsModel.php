@@ -27,106 +27,63 @@ function getSingle() {
     echo json_encode($result->fetch());
 }
 
-function getAll()
-{
-	$data = [];
-
-    // Execute select query onto the database
+function getAll() {
     $pdo = openConnection();
-	$query = "SELECT 
-                vehicle_rego AS rego,
-                vehicle_category AS category,
-                distance,
-                origin,
-                destination,
-                start_date,
-                end_date,
-                trip_id
-            FROM trip_whole WHERE ";
-    $countQuery = "SELECT COUNT(vehicle_rego) as count FROM trip_whole WHERE ";
-    if (isset($_GET['cats'])) {
+    $data = [];
+    
+    $query = "SELECT vehicle_rego AS rego, vehicle_category AS category, distance, origin, destination, start_date, end_date, trip_id
+              FROM trip_whole WHERE 1=1"; // Ensure WHERE always exists
+    $countQuery = "SELECT COUNT(vehicle_rego) as count FROM trip_whole WHERE 1=1";
+
+    // Filter by categories
+    if (isset($_GET['cats']) && is_array($_GET['cats'])) {
         $cats = $_GET['cats'];
-        $query .= " vehicle_category IN (";
-        $countQuery .= " vehicle_category IN (";
-        $i = 0;
-        foreach ($cats as $cat) {
-            $query .= "'$cat'";
-            $countQuery .= "'$cat'";
-            if ($i < count($cats) - 1) {
-                $query .= ', ';
-                $countQuery .= ', ';
-            }
-            $i++;
-        }
-        $query .= ') AND';
-        $countQuery .= ') AND';
+        $catsList = implode("', '", array_map('htmlspecialchars', $cats));
+        $query .= " AND vehicle_category IN ('$catsList')";
+        $countQuery .= " AND vehicle_category IN ('$catsList')";
     }
-    if (isset($_GET['startDate'])) {
-        $startDate = $_GET['startDate'];
-        $query .= "start_date >= $startDate AND ";
-        $countQuery .= "start_date >= $startDate AND ";
+
+    // Filter by rego
+    if (isset($_GET['rego']) && !empty($_GET['rego'])) {
+        $rego = $_GET['rego'] . '%'; // Add % wildcard for LIKE query
+        $query .= " AND vehicle_rego LIKE :rego";
+        $countQuery .= " AND vehicle_rego LIKE :rego";
     }
-    if (isset($_GET['endDate'])) {
-        $endDate = $_GET['endDate'];
-        $query .= "odometer <= $endDate AND ";
-        $countQuery .= "odometer <= $endDate AND ";
-    }
-    if (isset($_GET['rego'])) {
-        $rego = $_GET['rego'];
-        $query .= " vehicle_rego LIKE '$rego%' AND";
-        $countQuery .= " vehicle_rego LIKE '$rego%' AND";
-    }
-    $query = rtrim($query, "AND ");
-    $query = rtrim($query, "WHERE ");
-    $countQuery = rtrim($countQuery, "AND ");
-    $countQuery = rtrim($countQuery, "WHERE ");
-    if (isset($_GET['num'])) {
-        $num = $_GET['num'];
-        $query .= " LIMIT $num";
-    } else {
-        $query .= " LIMIT 50";
-    }
-    if (isset($_GET['startIndex'])) {
-        $startIndex = $_GET['startIndex'];
-        $query .= " OFFSET $startIndex";
-    }
+
+    // Pagination and limits
+    $startIndex = isset($_GET['startIndex']) ? intval($_GET['startIndex']) : 0;
+    $num = isset($_GET['num']) ? intval($_GET['num']) : 50;
+
+    $query .= " LIMIT :num OFFSET :startIndex";
+
     try {
-        $result = $pdo->query($query);
-        $count = $pdo->query($countQuery);
+        // Prepare and execute the main query
+        $stmt = $pdo->prepare($query);
+        if (isset($rego)) $stmt->bindValue(':rego', $rego, PDO::PARAM_STR);
+        $stmt->bindValue(':num', $num, PDO::PARAM_INT);
+        $stmt->bindValue(':startIndex', $startIndex, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        // Execute the count query
+        $stmtCount = $pdo->prepare($countQuery);
+        if (isset($rego)) $stmtCount->bindValue(':rego', $rego, PDO::PARAM_STR);
+        $stmtCount->execute();
+        $count = $stmtCount->fetch()['count'];
+        
+        // Output result
+        echo json_encode([
+            "trips" => $result,
+            "count" => $count
+        ]);
+
     } catch (PDOException $e) {
         fatalError($e->getMessage());
         http_response_code(500);
-        echo $query;
         return;
     }
-    $i = 0;
-    echo '{"trips": ';
-    echo json_encode($result->fetchall());
-    while ($row = $result->fetch()) {
-        $i++;
-        $data[] = [
-            'rego' => htmlspecialchars($row['rego']),
-            'category' => htmlspecialchars($row['category']),
-            'distance' => htmlspecialchars($row['distance']),
-            'origin' => htmlspecialchars($row['origin']),
-            'destination' => htmlspecialchars($row['destination']),
-            'start_date' => htmlspecialchars($row['start_date']),
-            'end_date' => htmlspecialchars($row['end_date']),
-            'trip_id' => htmlspecialchars($row['trip_id'])
-        ];
-        // echo json_encode($data[0]);
-        if ($i < 50) echo ',';
-    }
-    echo ', ';
-    $count = $count->fetch()['count'];
-    echo '"count": ' . $count;
-    if ($count == 0) {
-        echo ', "query": "' . $query . '"';
-    }
-    echo '}';
-
-    
 }
+
 
 if (isset($_GET['trip_id'])) {
     getSingle();
