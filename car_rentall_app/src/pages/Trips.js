@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import AppBar from '../components/AppBar';
 import axios from 'axios';
 import TripsList from '../components/TripsList';
-import { Pagination, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput, Slider } from '@mui/material';
+import { Pagination, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput } from '@mui/material';
+import useAllStore from '../utils/store';
 
 const defaultData = {
     trips: [],
@@ -23,25 +24,25 @@ const MenuProps = {
 const pageSizeOptions = [10, 25, 50, 100];
 
 const Trips = () => {
-    const [data, setData] = useState(defaultData);
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(50);
-    const [rego, setRego] = useState('');
-    const [cats, setCats] = useState([]);
-    const [catsSelected, setCatsSelected] = useState([]);
-    const [odoRange, setOdoRange] = useState([0, 70000]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [data, setData] = React.useState(defaultData);
+    const [page, setPage] = React.useState(1);
+    const [pageSize, setPageSize] = React.useState(50);
+    const [rego, setRego] = React.useState('');
+    const [cats, setCats] = React.useState([]);
+    const [catsSelected, setCatsSelected] = React.useState([]);
+    const [odoRange, setOdoRange] =React.useState([0, 70000]);
+    const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState(null);
 
     // Fetch trips
-    useEffect(() => {
+    React.useEffect(() => {
         setLoading(true);
         axios.get('http://localhost:80/INFO_project-main/Server/models/TripsModel.php', {
             params: {
                 startIndex: (page - 1) * pageSize,
                 num: pageSize,
                 rego: rego === '' ? null : rego,
-                categories: catsSelected,
+                cats: catsSelected,
                 minOdo: odoRange[0],
                 maxOdo: odoRange[1]
             }
@@ -57,18 +58,18 @@ const Trips = () => {
         });
     }, [page, rego, catsSelected, odoRange, pageSize]);
 
-    // Fetch categories
-    useEffect(() => {
+    // Get categories
+    React.useEffect(() => {
         axios.get('http://localhost:80/INFO_project-main/Server/models/CategoriesModel.php')
-            .then(response => {
+            .then(function (response) {
                 setCats(response.data);
             })
-            .catch(error => {
-                console.error('Failed to fetch categories:', error);
+            .catch(function (error) {
+                console.log(error);
             });
     }, []);
 
-    const handleCategoryChange = (event) => {
+    const handleChange = (event) => {
         const {
             target: { value },
         } = event;
@@ -108,7 +109,7 @@ const Trips = () => {
                     id="demo-multiple-checkbox"
                     multiple
                     value={catsSelected}
-                    onChange={handleCategoryChange}
+                    onChange={handleChange}
                     input={<OutlinedInput label="Tag" />}
                     renderValue={(selected) => selected.join(', ')}
                     MenuProps={MenuProps}
@@ -121,20 +122,7 @@ const Trips = () => {
                     ))}
                 </Select>
             </FormControl>
-            <InputLabel id="range-slider" sx={{}}>Odometer range</InputLabel>
-            <Slider
-                getAriaLabel={() => 'Minimum distance'}
-                value={odoRange}
-                onChange={handleOdoChange}
-                valueLabelDisplay="auto"
-                aria-labelledby="range-slider"
-                disableSwap
-                getAriaValueText={(value) => `${value}km`}
-                sx={{width: 300}}
-                max={70000}
-                step={1000}
-                marks={[{value: 0, label: '0km'}, {value: 70000, label: '70000km'}]}
-            />
+        
             <Pagination 
                 count={Math.ceil(data.count / pageSize)} 
                 color="primary" 
@@ -164,4 +152,3 @@ const Trips = () => {
 }
 
 export default Trips;
-
