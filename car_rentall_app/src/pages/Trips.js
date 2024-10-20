@@ -86,12 +86,13 @@ const Trips = () => {
 
     return (
         <div>
-            <AppBar />
+            <AppBar/>
             <h1>Trips</h1>
-            {loading && <p>Loading trips...</p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <h2>{data.count} trips found</h2>
+
             <div>
+                {/* Rego search */}
                 <FormControl sx={{ m: 1, width: 150 }}>
                     <InputLabel htmlFor="outlined-adornment-amount">Rego</InputLabel>
                     <OutlinedInput
@@ -122,7 +123,8 @@ const Trips = () => {
                     ))}
                 </Select>
             </FormControl>
-        
+            
+            {/* Pagination */}
             <Pagination 
                 count={Math.ceil(data.count / pageSize)} 
                 color="primary" 
@@ -130,6 +132,8 @@ const Trips = () => {
                 onChange={(event, value) => setPage(value)}
                 style={{ margin: "auto", justifyContent: "center", display: "flex" }}
             />
+            
+            {/* Page size selector */}
             <FormControl sx={{ m: 1 }}>
                 <InputLabel id="pageSize-label">Page</InputLabel>
                 <Select
@@ -146,7 +150,9 @@ const Trips = () => {
                     ))}
                 </Select>
             </FormControl>
-            <TripsList trips={data.trips} />
+
+            {/* List of trips */}
+            <TripsList trips={data.trips}/>
         </div>
     );
 }
