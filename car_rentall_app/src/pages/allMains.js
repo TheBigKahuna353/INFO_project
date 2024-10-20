@@ -41,7 +41,7 @@ const Maintenances = () => {
                         startIndex: (page - 1) * pageSize,
                         num: pageSize,
                         rego: rego === '' ? null : rego,
-                        categories: catsSelected.length > 0 ? catsSelected : null // Corrected to use 'categories'
+                        category: catsSelected.length > 0 ? catsSelected : null // Corrected to use 'categories'
                     }
                 });
                 setMaintenances(response.data);
