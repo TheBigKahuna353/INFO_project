@@ -75,6 +75,23 @@ function getallRelocations() {
         $query .= " vehicle_rego LIKE '$rego%' AND";
         $countQuery .= " vehicle_rego LIKE '$rego%' AND";
     }
+    if (isset($_GET['category'])) {
+        $cats = $_GET['category'];
+        $query .= " vehicle_category IN (";
+        $countQuery .= " vehicle_category IN (";
+        $i = 0;
+        foreach ($cats as $cat) {
+            $query .= "'$cat'";
+            $countQuery .= "'$cat'";
+            if ($i < count($cats) - 1) {
+                $query .= ', ';
+                $countQuery .= ', ';
+            }
+            $i++;
+        }
+        $query .= ') AND';
+        $countQuery .= ') AND';
+    }
     $query = rtrim($query, "AND ");
     $query = rtrim($query, "WHERE ");
     $countQuery = rtrim($countQuery, "AND ");
