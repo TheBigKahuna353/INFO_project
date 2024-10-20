@@ -41,7 +41,7 @@ const Relocations = () => {
                 startIndex: (page - 1) * pageSize,
                 num: pageSize,
                 rego: rego === '' ? null : rego,
-                categories: catsSelected
+                category: catsSelected
             }
         })
         .then(response => {
@@ -56,17 +56,16 @@ const Relocations = () => {
     }, [page, rego, catsSelected, pageSize]);
 
     // Fetch categories
-    useEffect(() => {
+    React.useEffect(() => {
         axios.get('http://localhost:80/INFO_project-main/Server/models/CategoriesModel.php')
-            .then(response => {
+            .then(function (response) {
                 setCats(response.data);
             })
-            .catch(error => {
-                console.error('Failed to fetch categories:', error);
+            .catch(function (error) {
+                console.log(error);
             });
     }, []);
-
-    const handleCategoryChange = (event) => {
+    const handleChange = (event) => {
         const {
             target: { value },
         } = event;
@@ -104,7 +103,26 @@ const Relocations = () => {
                     />
                 </FormControl>
             </div>
-
+            <FormControl sx={{ m: 1, width: 300 }}>
+                <InputLabel id="demo-multiple-checkbox-label">Categories</InputLabel>
+                <Select
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={catsSelected}
+                    onChange={handleChange}
+                    input={<OutlinedInput label="Tag" />}
+                    renderValue={(selected) => selected.join(', ')}
+                    MenuProps={MenuProps}
+                >
+                    {cats.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={catsSelected.includes(name)} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
             
             {/* Pagination */}
             <Pagination 
@@ -114,7 +132,7 @@ const Relocations = () => {
                 onChange={(event, value) => setPage(value)}
                 style={{ margin: "auto", justifyContent: "center", display: "flex" }}
             />
-
+            
             {/* Page size selector */}
             <FormControl sx={{ m: 1 }}>
                 <InputLabel id="pageSize-label">Page</InputLabel>
