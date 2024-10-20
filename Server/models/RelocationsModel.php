@@ -41,6 +41,7 @@ function getallRelocations() {
                 destination,
                 distance,
                 vehicle_rego AS rego,
+                vehicle_category AS category, 
                 relocation_id AS id
             FROM relocation_whole WHERE ";
     $countQuery = "SELECT COUNT(vehicle_rego) as count FROM relocation_whole WHERE ";
@@ -71,8 +72,8 @@ function getallRelocations() {
     }
     if (isset($_GET['rego'])) {
         $rego = $_GET['rego'];
-        $query .= " vehicle_rego LIKE '$rego' AND";
-        $countQuery .= " vehicle_rego LIKE '$rego' AND";
+        $query .= " vehicle_rego LIKE '$rego%' AND";
+        $countQuery .= " vehicle_rego LIKE '$rego%' AND";
     }
     $query = rtrim($query, "AND ");
     $query = rtrim($query, "WHERE ");
