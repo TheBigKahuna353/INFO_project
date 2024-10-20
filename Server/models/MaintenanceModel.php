@@ -65,9 +65,21 @@ function getallMain() {
         $countQuery .= " vehicle_rego LIKE '$rego%' AND";
     }
     if (isset($_GET['category'])) {
-        $category = $_GET['category'];
-        $query .= " vehicle_category = '$category' AND";
-        $countQuery .= " vehicle_category = '$category' AND";
+        $cats = $_GET['category'];
+        $query .= " vehicle_category IN (";
+        $countQuery .= " vehicle_category IN (";
+        $i = 0;
+        foreach ($cats as $cat) {
+            $query .= "'$cat'";
+            $countQuery .= "'$cat'";
+            if ($i < count($cats) - 1) {
+                $query .= ', ';
+                $countQuery .= ', ';
+            }
+            $i++;
+        }
+        $query .= ') AND';
+        $countQuery .= ') AND';
     }
     $query = rtrim($query, "AND ");
     $query = rtrim($query, "WHERE ");
