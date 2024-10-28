@@ -107,7 +107,7 @@ React.useEffect(() => {
             <Paper sx={css} elevation={11}>
                 <Pagination count={getPages(maintenance.count)} page={pages[1]} onChange={(event, value) => setPages([pages[0], value, pages[2]])} sx={pageCSS}/>
                 <MaintenanceList maintenance={maintenance.maintenances}/>
-                {maintenance.count === 0 ? <p>No relocations found</p> : null}
+                {maintenance.count === 0 ? <p>No maintenances found</p> : null}
             </Paper>
             <h2>Relocations</h2>
             <Paper sx={css} elevation={11}>

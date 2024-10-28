@@ -10,31 +10,29 @@ const defaultData = {
     count: 0
 };
 
-
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
     },
-  },
 };
 
 const pageSizeOptions = [10, 25, 50, 100];
 
 const Vehicles = () => {
-
     const [vehicles, setVehicles] = React.useState(defaultData);
     const [page, setPage] = React.useState(1);
     const [pageSize, setPageSize] = React.useState(50);
     const [cats, setCats] = React.useState([]);
-
     const [catsSelected, setCatsSelected] = React.useState([]);
     const [odoRange, setOdoRange] = React.useState([0, 70000]);
     const [rego, setRego] = React.useState('');
     const [showDue, setShowDue] = React.useState(false);
+    const [loading, setLoading] = React.useState(false); // Loading state
 
     const cat = useAllStore((state) => state.category);
     const setCat = useAllStore((state) => state.setCategory);
@@ -43,8 +41,9 @@ const Vehicles = () => {
         setCatsSelected([cat]);
     }
 
-    // get vehicles
+    // Get vehicles
     React.useEffect(() => {
+        setLoading(true); // Set loading to true when fetching data
         axios.get('http://localhost:80/INFO_project-main/Server/models/VehiclesModel.php', {
             params: {
                 startIndex: (page - 1) * pageSize,
@@ -58,21 +57,23 @@ const Vehicles = () => {
         })
         .then(function (response) {
             setVehicles(response.data);
+            setLoading(false); // Set loading to false after data is fetched
         })
         .catch(function (error) {
             console.log(error);
+            setLoading(false); // Set loading to false on error
         });
     }, [page, catsSelected, odoRange, rego, pageSize, showDue]);
 
-    // get categories
+    // Get categories
     React.useEffect(() => {
         axios.get('http://localhost:80/INFO_project-main/Server/models/CategoriesModel.php')
-        .then(function (response) {
-            setCats(response.data);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+            .then(function (response) {
+                setCats(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }, []);
 
     const handleChange = (event) => {
@@ -80,10 +81,9 @@ const Vehicles = () => {
             target: { value },
         } = event;
         setCatsSelected(
-            // On autofill we get the stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
-    }
+    };
 
     const handleOdoChange = (event, newValue) => {
         if (newValue[1] - newValue[0] < 1000) {
@@ -95,14 +95,15 @@ const Vehicles = () => {
         } else {
             setOdoRange(newValue);
         }
-    }
+    };
 
     return (
         <div>
-            <AppBar/>
+            <AppBar />
             <h1>Vehicles</h1>
+            {loading && <p>Loading vehicles...</p>} {/* Loading message */}
             <p>{vehicles.count} vehicles found</p>
-            <div style={{display:"inline-flex"}}>
+            <div style={{ display: "inline-flex" }}>
                 <p>Show in need of maintenance</p>
                 <Checkbox
                     checked={showDue}
@@ -110,7 +111,7 @@ const Vehicles = () => {
                 />
             </div>
             <div>
-                <FormControl sx={{ m: 1, width: 150}}>
+                <FormControl sx={{ m: 1, width: 150 }}>
                     <InputLabel htmlFor="outlined-adornment-amount">Rego</InputLabel>
                     <OutlinedInput
                         id="outlined-adornment-amount"
@@ -120,7 +121,7 @@ const Vehicles = () => {
                     />
                 </FormControl>
             </div>
-            <FormControl sx={{ m: 1, width: 300}}>
+            <FormControl sx={{ m: 1, width: 300 }}>
                 <InputLabel id="demo-multiple-checkbox-label">Categories</InputLabel>
                 <Select
                     labelId="demo-multiple-checkbox-label"
@@ -131,11 +132,11 @@ const Vehicles = () => {
                     input={<OutlinedInput label="Tag" />}
                     renderValue={(selected) => selected.join(', ')}
                     MenuProps={MenuProps}
-                    >
+                >
                     {cats.map((name) => (
                         <MenuItem key={name} value={name}>
-                        <Checkbox checked={catsSelected.includes(name)} />
-                        <ListItemText primary={name} />
+                            <Checkbox checked={catsSelected.includes(name)} />
+                            <ListItemText primary={name} />
                         </MenuItem>
                     ))}
                 </Select>
@@ -149,19 +150,19 @@ const Vehicles = () => {
                 aria-labelledby="range-slider"
                 disableSwap
                 getAriaValueText={(value) => `${value}km`}
-                sx={{width: 300}}
+                sx={{ width: 300 }}
                 max={70000}
                 step={1000}
-                marks={[{value: 0, label: '0km'}, {value: 70000, label: '70000km'}]}
+                marks={[{ value: 0, label: '0km' }, { value: 70000, label: '70000km' }]}
             />
-            <Pagination 
-                count={Math.ceil(vehicles.count/pageSize)} 
-                color="primary" 
+            <Pagination
+                count={Math.ceil(vehicles.count / pageSize)}
+                color="primary"
                 page={page}
                 onChange={(event, value) => setPage(value)}
-                style={{margin: "auto", justifyContent: "center", display: "flex"}}
-                />
-            <FormControl sx={{ m: 1}}>
+                style={{ margin: "auto", justifyContent: "center", display: "flex" }}
+            />
+            <FormControl sx={{ m: 1 }}>
                 <InputLabel id="pageSize-label">Page</InputLabel>
                 <Select
                     input={<OutlinedInput label="Tag" />}
@@ -169,17 +170,17 @@ const Vehicles = () => {
                     value={pageSize}
                     onChange={(event) => setPageSize(event.target.value)}
                     MenuProps={MenuProps}
-                    >
+                >
                     {pageSizeOptions.map((size) => (
                         <MenuItem key={size} value={size}>
-                        {size}
+                            {size}
                         </MenuItem>
                     ))}
                 </Select>
             </FormControl>
-            <VehicleList vehicles={vehicles.vehicles}/>
+            <VehicleList vehicles={vehicles.vehicles} />
         </div>
     );
-}
+};
 
 export default Vehicles;

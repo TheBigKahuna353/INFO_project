@@ -4,7 +4,6 @@ require_once '../db/database.php';
 header("Access-Control-Allow-Origin: *");
 header('Content-Type: application/json');
 
-
 function getSingle() {
     $pdo = openConnection();
     $id = $_GET['id'];
@@ -13,6 +12,7 @@ function getSingle() {
                 end_date,
                 location,
                 mileage,
+                vehicle_category AS category,  // Added category here
                 vehicle_rego AS rego,
                 maintenance_id AS id
             FROM maintenance_whole
@@ -27,11 +27,6 @@ function getSingle() {
 }
 
 function getallMain() {
-
-    // startIndex = 0
-    // num = 50
-    // 
-
     // Execute select query onto the database
     $pdo = openConnection();
     $query = "SELECT 
@@ -39,8 +34,8 @@ function getallMain() {
                 end_date,
                 location,
                 mileage,
-                vehicle_category AS category,
                 vehicle_rego AS rego,
+                vehicle_category AS category,
                 maintenance_id AS id
             FROM maintenance_whole WHERE ";
     $countQuery = "SELECT COUNT(vehicle_rego) as count FROM maintenance_whole WHERE ";
@@ -66,13 +61,25 @@ function getallMain() {
     }
     if (isset($_GET['rego'])) {
         $rego = $_GET['rego'];
-        $query .= " vehicle_rego = '$rego' AND";
-        $countQuery .= " vehicle_rego = '$rego' AND";
+        $query .= " vehicle_rego LIKE '$rego%' AND";
+        $countQuery .= " vehicle_rego LIKE '$rego%' AND";
     }
     if (isset($_GET['category'])) {
-        $category = $_GET['category'];
-        $query .= " vehicle_category = '$category' AND";
-        $countQuery .= " vehicle_category = '$category' AND";
+        $cats = $_GET['category'];
+        $query .= " vehicle_category IN (";
+        $countQuery .= " vehicle_category IN (";
+        $i = 0;
+        foreach ($cats as $cat) {
+            $query .= "'$cat'";
+            $countQuery .= "'$cat'";
+            if ($i < count($cats) - 1) {
+                $query .= ', ';
+                $countQuery .= ', ';
+            }
+            $i++;
+        }
+        $query .= ') AND';
+        $countQuery .= ') AND';
     }
     $query = rtrim($query, "AND ");
     $query = rtrim($query, "WHERE ");
@@ -109,5 +116,4 @@ if (isset($_GET['id'])) {
 } else {
     echo getallMain();
 }
-
 ?>
