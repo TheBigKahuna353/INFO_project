@@ -46,13 +46,13 @@ function getallRelocations() {
     $countQuery = "SELECT COUNT(vehicle_rego) as count FROM relocation_whole WHERE ";
     if (isset($_GET['start_date'])) {
         $start_date = $_GET['start_date'];
-        $query .= " start_date = '$start_date' AND";
-        $countQuery .= " start_date = '$start_date' AND";
+        $query .= " start_date >= '$start_date' AND";
+        $countQuery .= " start_date >= '$start_date' AND";
     }
     if (isset($_GET['end_date'])) {
         $end_date = $_GET['end_date'];
-        $query .= " end_date = '$end_date' AND";
-        $countQuery .= " end_date = '$end_date' AND";
+        $query .= " end_date <= '$end_date' AND";
+        $countQuery .= " end_date <= '$end_date' AND";
     }
     if (isset($_GET['origin'])) {
         $origin = $_GET['origin'];
